@@ -7,11 +7,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-  .exp-bullets strong {
-  white-space: nowrap;
-  display: inline;
-  vertical-align: baseline;
-  }
+
+  .exp-bullets .hl {
+  color: var(--text);
+  font-weight: 600;
+}
   :root {
     --accent: #FF4D1C;
     --accent-dim: rgba(255,77,28,0.12);
@@ -359,12 +359,16 @@
   .exp-divider { height: 1px; background: var(--border); margin-bottom: 28px; }
   .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 14px; }
   .exp-bullets li {
-    display: flex;
-    gap: 14px;
-    font-size: 15px;
-    line-height: 1.65;
-    color: var(--text-dim);
-  }
+  display: flex;
+  gap: 14px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--text-dim);
+}
+
+.exp-bullets li > span {
+  display: block;
+}
   .exp-bullets li::before {
     content: '→';
     color: var(--accent);
@@ -651,18 +655,68 @@
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
   /* ── RESPONSIVE ── */
-  @media (max-width: 900px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    .hero-right { display: none; }
-    .skills-grid { grid-template-columns: 1fr; }
-    .contact-inner { grid-template-columns: 1fr; gap: 48px; }
-    nav .nav-links { display: none; }
-  }
-  @media (max-width: 600px) {
-    .projects-grid { grid-template-columns: 1fr; }
-    .cert-grid { grid-template-columns: 1fr; }
-    .stat-grid { grid-template-columns: 1fr 1fr; }
-  }
+@media (max-width: 900px) {
+  .hero-grid { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .skills-grid { grid-template-columns: 1fr; }
+  .contact-inner { grid-template-columns: 1fr; gap: 48px; }
+  nav .nav-links { display: none; }
+}
+
+@media (max-width: 600px) {
+  /* Nav */
+  nav { padding: 16px 5%; }
+
+  /* Secciones — reducir padding vertical */
+  section { padding: 64px 5%; }
+
+  /* Hero */
+  #hero { padding: 100px 5% 60px; }
+  .hero-name { font-size: 48px; }
+  .hero-title { font-size: 13px; }
+  .hero-summary { font-size: 15px; }
+  .hero-cta { flex-direction: column; }
+  .hero-cta a { width: 100%; justify-content: center; }
+
+  /* Grids */
+  .projects-grid { grid-template-columns: 1fr; }
+  .cert-grid { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr 1fr; }
+
+  /* Experience */
+  .exp-header { padding: 24px 20px; }
+  .exp-body { padding: 0 20px 24px; }
+  .exp-role { font-size: 18px; }
+  .exp-meta { flex-direction: column; gap: 8px; align-items: flex-start; }
+  .exp-bullets li { font-size: 14px; gap: 10px; }
+
+  /* Projects */
+  .project-card { padding: 24px; }
+  .project-title { font-size: 17px; }
+
+  /* Skills */
+  .skill-group { padding: 22px 18px; }
+
+  /* Certifications */
+  .cert-card { padding: 18px 16px; }
+
+  /* Contact */
+  .availability-card { padding: 28px 20px; }
+  .social-handle { display: none; }
+
+  /* Section titles */
+  .section-title { font-size: 30px; margin-bottom: 36px; }
+
+  /* Footer */
+  footer { flex-direction: column; gap: 8px; text-align: center; }
+}
+
+/* Pantallas muy pequeñas (360px o menos) */
+@media (max-width: 380px) {
+  .hero-name { font-size: 38px; }
+  .stat-grid { grid-template-columns: 1fr; }
+  .btn-primary, .btn-ghost { padding: 12px 20px; font-size: 13px; }
+}
 </style>
 </head>
 <body>
@@ -752,11 +806,11 @@
         <div class="exp-body">
           <div class="exp-divider"></div>
           <ul class="exp-bullets">
-            <li>Standardized laser weld first-piece validation by developing metallographic documentation and automated reporting tools, <strong>reducing cycle time by 40%</strong> using Kaizen methodology.</li>
-            <li>Developed a <strong>Python + Excel VBA automation tool</strong> for laser weld quality validation using image analysis based on ISO 13919-1 Level B specifications and 3D visualization.</li>
-            <li>Reduced scrap by <strong>15%</strong> by programming Keyence IV sensors in a Jidoka system to detect assembly defects.</li>
-            <li>Trained cross-functional teams using <strong>5S methodology</strong> during production line startup and tooling deployment.</li>
-            <li>Developed an Excel dashboard to calculate ultrasonic washing concentration levels and generate corrective actions based on titration data.</li>
+            <li><span>Standardized laser weld first-piece validation by developing metallographic documentation and automated reporting tools, <span class="hl">reducing cycle time by 40%</span class="hl"> using Kaizen methodology.</span></li>
+            <li><span>Developed a <span class="hl">Python + Excel VBA automation tool</span class="hl"> for laser weld quality validation using image analysis based on ISO 13919-1 Level B specifications and 3D visualization.</span></li>
+            <li> <span><span class="hl">Reduced scrap by 15%</span class="hl"> by programming Keyence IV sensors in a Jidoka system to detect assembly defects.</span></li>
+            <li><span>Trained cross-functional teams using <span class="hl">5S methodology</span class="hl"> during production line startup and tooling deployment.</span></li>
+            <li><span>Developed an Excel dashboard to calculate ultrasonic washing concentration levels and generate corrective actions based on titration data.</span></li>
           </ul>
         </div>
       </div>
@@ -775,11 +829,11 @@
         <div class="exp-body">
           <div class="exp-divider"></div>
           <ul class="exp-bullets">
-            <li>Reduced SAF input errors by <strong>30%</strong> by developing an Excel VBA poka-yoke system based on field error analysis.</li>
-            <li>Managed TPMs and preventive maintenance records via EPICOR to support <strong>IATF 16949 audit compliance</strong>.</li>
-            <li>Automated maintenance KPI dashboards integrating <strong>MTTR, MTBF, uptime, and OEE</strong> metrics.</li>
-            <li>Performed troubleshooting on automated manufacturing equipment including <strong>Allen Bradley PLC</strong> logic, HMI validation systems, sensors, and pneumatic integrations.</li>
-            <li>Supported corrective and preventive maintenance on robotic cells, conveyors, laser welding, ultrasonic washing, and automated assembly systems during active production operations.</li>
+            <li><span><span class="hl">Reduced SAF input errors by 30% </span class="hl"> by developing an Excel VBA poka-yoke system based on field error analysis.</span></li>
+            <li><span>Managed TPMs and preventive maintenance records via EPICOR to support <span class="hl">IATF 16949 audit compliance</span class="hl">.</span></li>
+            <li><span>Automated maintenance KPI dashboards integrating <span class="hl">MTTR, MTBF, uptime, and OEE</span class="hl"> metrics.</span></li>
+            <li><span>Performed troubleshooting on automated manufacturing equipment including <span class="hl">Allen Bradley PLC</span class="hl"> logic, HMI validation systems, sensors, and pneumatic integrations.</span></li>
+            <li><span>Supported corrective and preventive maintenance on robotic cells, conveyors, laser welding, ultrasonic washing, and automated assembly systems during active production operations.</span></li>
           </ul>
         </div>
       </div>
@@ -798,8 +852,8 @@
         <div class="exp-body">
           <div class="exp-divider"></div>
           <ul class="exp-bullets">
-            <li>Developed a <strong>music score editor</strong> capable of generating PWM-based audio code for ESP32 and ATmega328P microcontrollers, enabling musical playback from custom digital sheet music.</li>
-            <li>Architected <strong>high-performance AMD GPU workstations</strong> optimized for Revit, CAD/CAE, and long-duration rendering workloads through benchmarking, thermal, and power-efficiency optimization.</li>
+            <li><span>Developed a <span class="hl">music score editor</span class="hl"> capable of generating PWM-based audio code for ESP32 and ATmega328P microcontrollers, enabling musical playback from custom digital sheet music.</span></li>
+            <li><span>Architected <span class="hl">high-performance AMD GPU workstations</span class="hl"> optimized for Revit, CAD/CAE, and long-duration rendering workloads through benchmarking, thermal, and power-efficiency optimization.</span></li>
           </ul>
         </div>
       </div>
