@@ -15,6 +15,18 @@ SITE.education = [
     highlight: true
   },
   {
+    name: { es: "SolidWorks CSWP", en: "SolidWorks CSWP" },
+    meta: { es: "SolidWorks · En proceso", en: "SolidWorks · In process" },
+    note: null,
+    highlight: false
+  },
+  {
+    name: { es: "SolidWorks CSWA", en: "SolidWorks CSWA" },
+    meta: { es: "SolidWorks · En proceso", en: "SolidWorks · In process" },
+    note: null,
+    highlight: false
+  },
+  {
     name: { es: "Getting Started with Deep Learning", en: "Getting Started with Deep Learning" },
     meta: { es: "NVIDIA · 2024", en: "NVIDIA · 2024" },
     note: null,
@@ -29,6 +41,18 @@ SITE.education = [
   {
     name: { es: "Introducción al IoT", en: "Introduction to IoT" },
     meta: { es: "CISCO · 2023", en: "CISCO · 2023" },
+    note: null,
+    highlight: false
+  },
+  {
+    name: { es: "Lean Six Sigma: Cinturón Blanco", en: "Lean Six Sigma: White Belt" },
+    meta: { es: "Six Sigma Society · 2026", en: "Six Sigma Society · 2026" },
+    note: null,
+    highlight: false
+  },
+  {
+    name: { es: "Fundamentos de estadística: Bases", en: "Statistics Foundations 1: The Basics" },
+    meta: { es: "LinkedIn · 2026", en: "LinkedIn · 2026" },
     note: null,
     highlight: false
   },

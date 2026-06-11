@@ -8,46 +8,49 @@ window.SITE = window.SITE || {};
 
 SITE.skills = [
   {
-    group: { es: "Industrial", en: "Industrial" },
+    group: { es: "Automatización / PLC", en: "Automation / PLC" },
     items: [
-      { name: "RSLogix 5000", level: "pro" },
+      { name: "RSLogix 500/5000", level: "pro" },
       { name: "TIA Portal", level: "pro" },
-      { name: "Keyence IV", level: "pro" },
+      { name: "Keyence (AI vision)", level: "pro" },
       { name: "COGNEX", level: "pro" },
-      { name: "EPICOR", level: "pro" },
-      { name: "Power BI", level: "pro" },
-      { name: "IATF 16949", level: "pro" },
-      { name: "Lean / Kaizen", level: "pro" },
-      { name: "TPM / OEE", level: "pro" },
-      { name: "FMEA", level: "pro" },
-      { name: "5S · Jidoka", level: "pro" },
-      { name: "FANUC Laser Welding", level: "pro" }
     ]
   },
-  {
-    group: { es: "Ingeniería", en: "Engineering" },
-    items: [
-      { name: "AutoCAD", level: "pro" },
-      { name: "SolidWorks", level: "mid" },
-      { name: "LabVIEW", level: "mid" },
-      { name: "Allen Bradley PLC", level: "pro" },
-      { name: "HMI Systems", level: "pro" },
-      { name: "Pneumatic Systems", level: "pro" },
-      { name: "Vision Systems", level: "pro" }
-    ]
-  },
-  {
-    group: { es: "Programación", en: "Coding" },
+    {
+    group: { es: "Software y Datos", en: "Software & Data" },
     items: [
       { name: "Python", level: "pro" },
       { name: "Excel VBA", level: "pro" },
       { name: "C", level: "pro" },
       { name: "C++", level: "pro" },
       { name: "MATLAB", level: "pro" },
+      { name: "PowerBI", level: "pro" },
       { name: "C#", level: "mid" },
       { name: "MySQL", level: "mid" },
       { name: "HTML / CSS", level: "mid" },
       { name: "JavaScript", level: "mid" }
     ]
-  }
+  },
+    {
+    group: { es: "Herramientas de Ingeniería", en: "Engineering Tools" },
+    items: [
+      { name: "AutoCAD", level: "pro" },
+      { name: "EPICOR ERP", level: "pro" },
+      { name: "SolidWorks", level: "mid" },
+      { name: "LabVIEW", level: "mid" },
+    ]
+  },
+  {
+    group: { es: "Manufactura", en: "Manufacturing" },
+    items: [
+
+      { name: "IATF 16949", level: "pro" },
+      { name: "Lean / Kaizen / 5s", level: "pro" },
+      { name: "TPM, OEE/MTTR/MTBF", level: "pro" },
+      { name: "FMEA", level: "pro" },
+      { name: "metallographic analysis", level: "pro" },
+      { name: "FANUC Laser Welding", level: "pro" },
+      { name: "Struers equipment", level: "pro" }
+    ]
+  },
 ];
