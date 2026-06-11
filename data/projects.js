@@ -80,6 +80,7 @@ SITE.projects = [
         en: "Personal project bridging music and embedded systems: an editor for writing digital sheet music and compiling it to C++ code with PWM audio generation, playable on low-cost microcontrollers."
       },
       highlights: [
+        { es: "Selección de componentes basada en benchmarks por carga de trabajo", en: "Component selection based on per-workload benchmarks" },
       ],
       stack: ["HTML", "Javascrypt", "SQLite", "Python"],
       gallery: []
