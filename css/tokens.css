@@ -1,0 +1,74 @@
+/* ════════════════════════════════════════════════════════════
+   TOKENS DE DISEÑO — paletas del sitio.
+   El selector de tema (puntos de color en la nav) cambia entre
+   los bloques [data-theme="..."]. La elección se guarda sola.
+   ════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── PALETA 1 (default): "Blueprint" ── */
+  --bg:        #0A1220;
+  --bg-panel:  rgba(12, 23, 40, 0.92);   /* más opaco = la rejilla no interfiere con la lectura */
+  --ink:       #E2EDF8;
+  --ink-soft:  #AFC3D6;                  /* texto de párrafos, más claro para legibilidad */
+  --muted:     #66809B;
+  --accent:    #4DA3FF;
+  --accent-2:  #67E8F9;
+  --accent-3:  #FFC857;
+  --grid:      rgba(95, 150, 210, 0.05); /* rejilla más tenue */
+  --grid-glow: rgba(103, 232, 249, 0.20);
+  --line:      rgba(95, 150, 210, 0.28);
+
+  /* ── TIPOGRAFÍA ── */
+  --font-display: 'Archivo', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* ── GEOMETRÍA ── */
+  --grid-size: 28px;
+  --max-w: 1080px;
+  --radius: 2px;
+}
+
+/* ── PALETA 2: "Fósforo" (sala de control, verde CRT + ámbar) ── */
+[data-theme="phosphor"] {
+  --bg:        #0A1410;
+  --bg-panel:  rgba(11, 23, 18, 0.92);
+  --ink:       #E3F4E8;
+  --ink-soft:  #AECBBA;
+  --muted:     #5F8169;
+  --accent:    #3DDC97;
+  --accent-2:  #A9F5CE;
+  --accent-3:  #F5C45E;
+  --grid:      rgba(80, 200, 140, 0.05);
+  --grid-glow: rgba(169, 245, 206, 0.18);
+  --line:      rgba(80, 200, 140, 0.26);
+}
+
+/* ── PALETA 3: "Brasa" (taller, sepia oscuro + cobre) ── */
+[data-theme="ember"] {
+  --bg:        #160F0A;
+  --bg-panel:  rgba(29, 20, 13, 0.92);
+  --ink:       #F4EADC;
+  --ink-soft:  #D0BCA3;
+  --muted:     #91795F;
+  --accent:    #F09A4B;
+  --accent-2:  #FFD9A0;
+  --accent-3:  #7FD0BC;
+  --grid:      rgba(220, 170, 110, 0.05);
+  --grid-glow: rgba(255, 217, 160, 0.16);
+  --line:      rgba(220, 170, 110, 0.25);
+}
+
+/* ── PALETA 4: "Ion" (laboratorio, violeta + lavanda + menta) ── */
+[data-theme="ion"] {
+  --bg:        #110B1E;
+  --bg-panel:  rgba(21, 14, 35, 0.92);
+  --ink:       #EEE8FA;
+  --ink-soft:  #C3B6DE;
+  --muted:     #7E6FA0;
+  --accent:    #A78BFA;
+  --accent-2:  #D8B4FE;
+  --accent-3:  #5EEAD4;
+  --grid:      rgba(160, 130, 220, 0.05);
+  --grid-glow: rgba(216, 180, 254, 0.18);
+  --line:      rgba(160, 130, 220, 0.26);
+}

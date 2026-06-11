@@ -1,0 +1,71 @@
+/* ══════════════════════════════════════════════════════════════
+   DOMINIOS — tu mapa de especialidades (sección "System Map").
+   Para agregar uno: copia un bloque. icon: ver lista en render.js
+   (robot, spark, chip, cpu, code, wrench, gear, shield...)
+   ══════════════════════════════════════════════════════════════ */
+window.SITE = window.SITE || {};
+
+SITE.domains = [
+  {
+    icon: "robot",
+    name: { es: "Robótica Industrial", en: "Industrial Robotics" },
+    desc: {
+      es: "Celdas robóticas, soldadura láser FANUC, mantenimiento de sistemas automatizados en producción activa.",
+      en: "Robotic cells, FANUC laser welding, maintenance of automated systems during active production."
+    },
+    code: "SYS-01"
+  },
+  {
+    icon: "spark",
+    name: { es: "Soldadura Láser", en: "Laser Welding" },
+    desc: {
+      es: "Validación de calidad ISO 13919-1, análisis metalográfico, documentación de primera pieza.",
+      en: "ISO 13919-1 quality validation, metallographic analysis, first-piece documentation."
+    },
+    code: "SYS-02"
+  },
+  {
+    icon: "cpu",
+    name: { es: "PLC & Control", en: "PLC & Control" },
+    desc: {
+      es: "Allen Bradley, RSLogix 5000, TIA Portal, HMI, sensores Keyence/COGNEX e integraciones neumáticas.",
+      en: "Allen Bradley, RSLogix 5000, TIA Portal, HMI, Keyence/COGNEX sensors and pneumatic integrations."
+    },
+    code: "SYS-03"
+  },
+  {
+    icon: "chip",
+    name: { es: "Sistemas Embebidos", en: "Embedded Systems" },
+    desc: {
+      es: "ESP32, ATmega328P, C/C++, generación de audio PWM, prototipado de hardware.",
+      en: "ESP32, ATmega328P, C/C++, PWM audio generation, hardware prototyping."
+    },
+    code: "SYS-04"
+  },
+  {
+    icon: "code",
+    name: { es: "Software & Datos", en: "Software & Data" },
+    desc: {
+      es: "Python, análisis de imagen, Excel VBA, dashboards de KPIs (MTTR, MTBF, OEE), Power BI.",
+      en: "Python, image analysis, Excel VBA, KPI dashboards (MTTR, MTBF, OEE), Power BI."
+    },
+    code: "SYS-05"
+  },
+  {
+    icon: "wrench",
+    name: { es: "Mantenimiento", en: "Maintenance" },
+    desc: {
+      es: "TPM, mantenimiento preventivo/correctivo, EPICOR, troubleshooting en piso, IATF 16949.",
+      en: "TPM, preventive/corrective maintenance, EPICOR, shop-floor troubleshooting, IATF 16949."
+    },
+    code: "SYS-06"
+  }
+];
+
+/* Cinta de especialidades (marquee). Términos técnicos en inglés
+   por estándar de industria — aplican a ambos idiomas. */
+SITE.ticker = [
+  "PROCESS AUTOMATION", "ROBOTICS", "LASER WELDING", "PLC PROGRAMMING",
+  "EMBEDDED SYSTEMS", "MACHINE VISION", "LEAN MANUFACTURING",
+  "PREVENTIVE MAINTENANCE", "PYTHON", "IATF 16949", "KAIZEN", "JIDOKA"
+];
