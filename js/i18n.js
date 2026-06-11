@@ -42,7 +42,7 @@ SITE.lang = localStorage.getItem("lang")
   || (navigator.language && navigator.language.startsWith("es") ? "es" : "en");
 
 /* ── TEMA (paleta de color) ── */
-SITE.themes = ["blueprint", "phosphor", "ember", "ion"];
+SITE.themes = ["blueprint", "phosphor", "ember", "ion", "paper", "coast"];
 SITE.theme = localStorage.getItem("theme") || "blueprint";
 /* aplicar de inmediato para evitar flash del tema default */
 if (SITE.theme !== "blueprint") document.documentElement.dataset.theme = SITE.theme;

@@ -461,6 +461,14 @@ footer {
 .theme-dot[data-theme="phosphor"]  { background: linear-gradient(135deg, #3DDC97, #0A1410); }
 .theme-dot[data-theme="ember"]     { background: linear-gradient(135deg, #F09A4B, #160F0A); }
 .theme-dot[data-theme="ion"]       { background: linear-gradient(135deg, #A78BFA, #110B1E); }
+.theme-dot[data-theme="paper"]     { background: linear-gradient(135deg, #F2EFE7 55%, #2563EB); }
+.theme-dot[data-theme="coast"]     { background: linear-gradient(135deg, #FF7E67, #0D181B); }
+
+/* transición suave al cambiar de tema */
+body, nav, .bp-card, .exp-panel, .domain-card, .social-link, .contact-panel, .band {
+  transition-property: background-color, background, border-color, color;
+  transition-duration: .35s;
+}
 
 /* ── ANIMACIONES DE SCROLL (sutiles, escalonadas) ── */
 .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease-out, transform .6s ease-out; }

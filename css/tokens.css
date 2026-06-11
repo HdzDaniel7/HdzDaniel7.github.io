@@ -2,21 +2,24 @@
    TOKENS DE DISEÑO — paletas del sitio.
    El selector de tema (puntos de color en la nav) cambia entre
    los bloques [data-theme="..."]. La elección se guarda sola.
+
+   Principio: el TEXTO es neutro (blanco/gris) para lectura fácil;
+   el COLOR vive solo en acentos, bordes y detalles.
    ════════════════════════════════════════════════════════════ */
 
 :root {
   /* ── PALETA 1 (default): "Blueprint" ── */
-  --bg:        #0A1220;
-  --bg-panel:  rgba(12, 23, 40, 0.92);   /* más opaco = la rejilla no interfiere con la lectura */
-  --ink:       #E2EDF8;
-  --ink-soft:  #AFC3D6;                  /* texto de párrafos, más claro para legibilidad */
-  --muted:     #66809B;
-  --accent:    #4DA3FF;
-  --accent-2:  #67E8F9;
-  --accent-3:  #FFC857;
-  --grid:      rgba(95, 150, 210, 0.05); /* rejilla más tenue */
+  --bg:        #0B111C;                  /* azul muy desaturado, casi neutro */
+  --bg-panel:  rgba(15, 20, 30, 0.93);   /* panel neutro-oscuro, no azul */
+  --ink:       #F2F5F8;                  /* texto principal: casi blanco */
+  --ink-soft:  #C6CDD5;                  /* párrafos: gris claro neutro */
+  --muted:     #7E8894;                  /* metadatos: gris medio neutro */
+  --accent:    #4DA3FF;                  /* azul eléctrico — solo acentos */
+  --accent-2:  #67E8F9;                  /* cian — interacción/hover */
+  --accent-3:  #FFC857;                  /* dorado — anotaciones/etiquetas */
+  --grid:      rgba(95, 150, 210, 0.05);
   --grid-glow: rgba(103, 232, 249, 0.20);
-  --line:      rgba(95, 150, 210, 0.28);
+  --line:      rgba(130, 155, 185, 0.24); /* bordes más neutros */
 
   /* ── TIPOGRAFÍA ── */
   --font-display: 'Archivo', sans-serif;
@@ -30,45 +33,78 @@
 
 /* ── PALETA 2: "Fósforo" (sala de control, verde CRT + ámbar) ── */
 [data-theme="phosphor"] {
-  --bg:        #0A1410;
-  --bg-panel:  rgba(11, 23, 18, 0.92);
-  --ink:       #E3F4E8;
-  --ink-soft:  #AECBBA;
-  --muted:     #5F8169;
+  --bg:        #0C120E;
+  --bg-panel:  rgba(15, 21, 17, 0.93);
+  --ink:       #F1F6F2;
+  --ink-soft:  #C5CEC8;
+  --muted:     #7E8A81;
   --accent:    #3DDC97;
   --accent-2:  #A9F5CE;
   --accent-3:  #F5C45E;
   --grid:      rgba(80, 200, 140, 0.05);
   --grid-glow: rgba(169, 245, 206, 0.18);
-  --line:      rgba(80, 200, 140, 0.26);
+  --line:      rgba(130, 175, 150, 0.22);
 }
 
 /* ── PALETA 3: "Brasa" (taller, sepia oscuro + cobre) ── */
 [data-theme="ember"] {
-  --bg:        #160F0A;
-  --bg-panel:  rgba(29, 20, 13, 0.92);
-  --ink:       #F4EADC;
-  --ink-soft:  #D0BCA3;
-  --muted:     #91795F;
+  --bg:        #14100B;
+  --bg-panel:  rgba(24, 19, 14, 0.93);
+  --ink:       #F6F2EB;
+  --ink-soft:  #D2CABE;
+  --muted:     #948A7B;
   --accent:    #F09A4B;
   --accent-2:  #FFD9A0;
   --accent-3:  #7FD0BC;
   --grid:      rgba(220, 170, 110, 0.05);
   --grid-glow: rgba(255, 217, 160, 0.16);
-  --line:      rgba(220, 170, 110, 0.25);
+  --line:      rgba(190, 160, 120, 0.22);
+}
+
+/* ── PALETA 5: "Papel" (CLARA — plano técnico impreso en papel) ──
+   Texto tinta oscura sobre crema; acentos en tonos hundidos para
+   mantener contraste AA sobre fondo claro. */
+[data-theme="paper"] {
+  --bg:        #F2EFE7;                  /* crema papel */
+  --bg-panel:  rgba(255, 253, 248, 0.92);
+  --ink:       #1C2433;                  /* tinta azul-negra */
+  --ink-soft:  #3F4A5C;                  /* párrafos: gris azulado oscuro */
+  --muted:     #75808F;
+  --accent:    #2563EB;                  /* azul plano */
+  --accent-2:  #0E7490;                  /* teal oscuro (hover/links legibles) */
+  --accent-3:  #B45309;                  /* ámbar quemado (anotaciones) */
+  --grid:      rgba(37, 99, 235, 0.07);  /* rejilla azul tenue, como papel milimétrico real */
+  --grid-glow: rgba(37, 99, 235, 0.22);
+  --line:      rgba(60, 80, 110, 0.25);
+}
+
+/* ── PALETA 6: "Costa" (COMBINADA — teal profundo + coral + arena) ──
+   Fondo frío, acentos cálidos: contraste por temperatura, no por brillo. */
+[data-theme="coast"] {
+  --bg:        #0D181B;                  /* teal-grafito profundo */
+  --bg-panel:  rgba(16, 26, 29, 0.93);
+  --ink:       #F2F6F5;
+  --ink-soft:  #C5D0CD;
+  --muted:     #7C8C89;
+  --accent:    #FF7E67;                  /* coral — cálido sobre fondo frío */
+  --accent-2:  #7DD3C0;                  /* menta — interacción */
+  --accent-3:  #F2C14E;                  /* arena — anotaciones */
+  --grid:      rgba(125, 211, 192, 0.05);
+  --grid-glow: rgba(125, 211, 192, 0.18);
+  --line:      rgba(125, 165, 155, 0.22);
 }
 
 /* ── PALETA 4: "Ion" (laboratorio, violeta + lavanda + menta) ── */
 [data-theme="ion"] {
-  --bg:        #110B1E;
-  --bg-panel:  rgba(21, 14, 35, 0.92);
-  --ink:       #EEE8FA;
-  --ink-soft:  #C3B6DE;
-  --muted:     #7E6FA0;
+  --bg:        #100C18;
+  --bg-panel:  rgba(18, 14, 27, 0.93);
+  --ink:       #F4F1F9;
+  --ink-soft:  #CBC5D6;
+  --muted:     #867E97;
   --accent:    #A78BFA;
   --accent-2:  #D8B4FE;
   --accent-3:  #5EEAD4;
   --grid:      rgba(160, 130, 220, 0.05);
   --grid-glow: rgba(216, 180, 254, 0.18);
-  --line:      rgba(160, 130, 220, 0.26);
+  --line:      rgba(150, 135, 180, 0.22);
 }
