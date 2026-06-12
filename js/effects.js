@@ -5,16 +5,6 @@
 
 const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-/* La rejilla se ilumina siguiendo el cursor */
-if (!reducedMotion) {
-  addEventListener("mousemove", e => {
-    const glow = document.querySelector(".gridglow");
-    if (!glow) return;
-    glow.style.setProperty("--mx", e.clientX + "px");
-    glow.style.setProperty("--my", e.clientY + "px");
-  }, { passive: true });
-}
-
 /* Tilt 3D sutil: la tarjeta se inclina unos grados siguiendo al cursor.
    Solo en dispositivos con cursor fino y hover real; el CSS aplica
    --rx/--ry únicamente en :hover (ver styles.css). */
@@ -104,14 +94,14 @@ function initScrollProgress() {
 }
 document.addEventListener("DOMContentLoaded", initScrollProgress);
 
-/* Las animaciones ambientales (ticker, chispa de soldadura) se pausan
-   cuando su sección sale de pantalla: menos ruido y menos batería */
+/* Las animaciones ambientales (ticker, chispa del hero) se pausan
+   cuando su sección sale de pantalla: menos CPU y menos batería */
 function observeAmbient() {
   if (reducedMotion) return;
   const io = new IntersectionObserver(entries => {
     entries.forEach(en => en.target.classList.toggle("paused", !en.isIntersecting));
   });
-  document.querySelectorAll(".ticker-wrap, .weld-divider").forEach(el => io.observe(el));
+  document.querySelectorAll(".ticker-wrap, .hero-diagram").forEach(el => io.observe(el));
 }
 
 /* Aparición sutil de tarjetas al hacer scroll */

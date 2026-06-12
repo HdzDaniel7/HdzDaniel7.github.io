@@ -54,9 +54,9 @@
 </head>
 <body>
 
-<!-- Capas de fondo: rejilla milimétrica + glow de cursor + auras -->
+<!-- Capas de fondo estáticas: rejilla milimétrica + auras (sin glow de
+     cursor — repintaba toda la pantalla en cada mousemove) -->
 <div class="gridlayer"></div>
-<div class="gridglow"></div>
 <div class="aura"></div>
 
 <nav>
@@ -76,17 +76,20 @@
   <!-- El contenido se genera desde /data — para editar tu información ve a esa carpeta -->
   <section id="hero" aria-label="Intro"></section>
   <div class="ticker-wrap" id="ticker" aria-hidden="true"></div>
-  <section id="domains" class="sec"></section>
+  <section id="domains" class="sec" data-code="SEC.02"></section>
   <div class="weld-divider" aria-hidden="true"></div>
-  <section id="experience" class="sec"></section>
+  <section id="experience" class="sec" data-code="SEC.03"></section>
   <div class="band" id="band"></div>
-  <section id="projects" class="sec"></section>
+  <section id="projects" class="sec" data-code="SEC.04"></section>
   <div class="weld-divider" aria-hidden="true"></div>
-  <section id="skills" class="sec"></section>
-  <section id="education" class="sec"></section>
-  <section id="languages" class="sec"></section>
+  <section id="skills" class="sec" data-code="SEC.05"></section>
+  <!-- educación e idiomas comparten fila en escritorio -->
+  <div class="sec-pair">
+    <section id="education" class="sec" data-code="SEC.06"></section>
+    <section id="languages" class="sec" data-code="SEC.07"></section>
+  </div>
   <div class="weld-divider" aria-hidden="true"></div>
-  <section id="contact" class="sec"></section>
+  <section id="contact" class="sec" data-code="SEC.08"></section>
 </main>
 
 <footer id="footer-content"></footer>

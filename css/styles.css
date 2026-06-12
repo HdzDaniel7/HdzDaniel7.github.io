@@ -27,22 +27,14 @@ a, button { touch-action: manipulation; }
 .mono { font-family: var(--font-mono); }
 a { color: inherit; }
 
-/* ── FONDO: rejilla + glow de cursor + auras de gradiente ── */
-.gridlayer, .gridglow {
+/* ── FONDO: rejilla + auras de gradiente (capas estáticas: se pintan
+   una vez y no vuelven a costar nada) ── */
+.gridlayer {
   position: fixed; inset: 0; pointer-events: none; z-index: 0;
   background-size: var(--grid-size) var(--grid-size);
-}
-.gridlayer {
   background-image:
     linear-gradient(var(--grid) 1px, transparent 1px),
     linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-}
-.gridglow {
-  background-image:
-    linear-gradient(var(--grid-glow) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-glow) 1px, transparent 1px);
-  -webkit-mask-image: radial-gradient(240px at var(--mx, -500px) var(--my, -500px), #000, transparent);
-  mask-image: radial-gradient(240px at var(--mx, -500px) var(--my, -500px), #000, transparent);
 }
 /* auras de color fijas, muy sutiles, dan profundidad sin ruido */
 .aura {
@@ -61,9 +53,9 @@ nav {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: stretch;
   padding: 0 6%;
-  background: color-mix(in srgb, var(--bg) 86%, transparent);
-  -webkit-backdrop-filter: blur(14px);
-  backdrop-filter: blur(14px);
+  /* fondo casi opaco en vez de backdrop-blur: el blur recalculaba
+     en cada frame de scroll */
+  background: color-mix(in srgb, var(--bg) 96%, transparent);
   border-bottom: 1px solid var(--line);
   font-family: var(--font-mono); font-size: 12px;
 }
@@ -156,7 +148,32 @@ nav {
 }
 
 /* ── SECCIONES ── */
-.sec { max-width: var(--max-w); margin: 64px auto; padding: 0 6%; }
+.sec { max-width: var(--max-w); margin: 64px auto; padding: 0 6%; position: relative; }
+
+/* marca de sección rotada en el margen lateral (solo pantallas anchas):
+   anotación de plano que aprovecha el espacio libre, costo cero */
+@media (min-width: 1320px) {
+  .sec[data-code]::before {
+    content: attr(data-code);
+    position: absolute; left: 6px; top: 4px;
+    transform: rotate(90deg); transform-origin: left top;
+    font-family: var(--font-mono); font-size: 9px; letter-spacing: .34em;
+    color: var(--muted); opacity: .55; white-space: nowrap;
+    pointer-events: none;
+  }
+  /* dentro del par no hay margen lateral propio: sin marca */
+  .sec-pair .sec[data-code]::before { display: none; }
+}
+
+/* educación + idiomas comparten fila en escritorio */
+.sec-pair { max-width: var(--max-w); margin: 64px auto; padding: 0 6%; }
+@media (min-width: 921px) {
+  .sec-pair { display: grid; grid-template-columns: 1.15fr 1fr; gap: 26px; align-items: start; }
+  .sec-pair .sec { margin: 0; padding: 0; max-width: none; }
+}
+@media (max-width: 920px) {
+  .sec-pair { padding: 0; margin: 0; }
+}
 .sec-head {
   display: flex; align-items: baseline; gap: 18px;
   margin-bottom: 30px; font-family: var(--font-mono);
@@ -278,8 +295,8 @@ h1 span {
 /* chispa de soldadura parpadeando */
 .spark { animation: sparkle 1.6s ease-in-out infinite; transform-origin: center; }
 @keyframes sparkle { 0%, 100% { opacity: .15; } 50% { opacity: 1; } }
-/* punto de escaneo */
-.scan-dot { animation: sparkle 2.4s ease-in-out infinite; }
+/* punto de escaneo: estático (la chispa de soldadura ya da el acento vivo) */
+.scan-dot { opacity: .9; }
 /* lecturas de datos: estáticas, como anotaciones de un plano real */
 .readout {
   position: absolute; font-family: var(--font-mono); font-size: 10px;
@@ -296,9 +313,15 @@ h1 span {
   position: relative; z-index: 1; margin: 80px 0 0;
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
   background: var(--bg-panel); overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-          mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
 }
+/* desvanecido en los bordes con overlays estáticos (más barato que
+   enmascarar un elemento animado) */
+.ticker-wrap::before, .ticker-wrap::after {
+  content: ''; position: absolute; top: 0; bottom: 0; width: 8%;
+  z-index: 1; pointer-events: none;
+}
+.ticker-wrap::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+.ticker-wrap::after { right: 0; background: linear-gradient(-90deg, var(--bg), transparent); }
 
 .ticker { display: flex; width: max-content; animation: ticker 36s linear infinite; }
 .ticker-wrap:hover .ticker { animation-play-state: paused; }
@@ -310,8 +333,14 @@ h1 span {
 .ticker span:hover { color: var(--accent-2); }
 @keyframes ticker { to { transform: translateX(-50%); } }
 
-/* ── DOMINIOS (mapa de sistemas) ── */
-.domains-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; position: relative; }
+/* ── DOMINIOS (intro lateral fija + tarjetas a la derecha:
+   rompe la columna única y usa el espacio lateral) ── */
+.domains-layout { display: grid; grid-template-columns: 320px 1fr; gap: 44px; align-items: start; }
+.domains-intro { position: sticky; top: 96px; }
+.domains-intro .sec-head { margin-bottom: 22px; }
+.domains-intro .sec-title { margin-bottom: 18px; }
+.domains-intro .sec-sub { margin: 0; }
+.domains-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; position: relative; }
 .domain-card {
   border: 1px solid var(--line);
   background: linear-gradient(170deg, color-mix(in srgb, var(--accent) 4%, var(--bg-panel)), var(--bg-panel) 45%);
@@ -596,15 +625,13 @@ h1 span {
   background: radial-gradient(closest-side, color-mix(in srgb, var(--accent-2) 9%, transparent), transparent);
   pointer-events: none;
 }
-/* con foto: texto a la izquierda, retrato técnico a la derecha */
+/* con foto: texto a la izquierda, retrato a la derecha (foto natural,
+   sin filtros — solo el marco técnico) */
 .contact-panel.has-photo { display: grid; grid-template-columns: 1fr 230px; gap: 36px; align-items: center; }
 .contact-photo { position: relative; margin: 0; }
 .contact-photo img {
   width: 100%; display: block; border: 1px solid var(--line);
-  filter: grayscale(1) contrast(1.05) brightness(.92);
-  mix-blend-mode: luminosity;
 }
-.contact-photo { background: color-mix(in srgb, var(--accent) 35%, var(--bg)); }
 .contact-photo figcaption {
   position: absolute; left: 0; bottom: -22px;
   font-family: var(--font-mono); font-size: 9px; color: var(--accent-3); letter-spacing: .18em;
@@ -669,35 +696,24 @@ footer {
 .flow-arrow { color: var(--accent-2); font-size: 13px; }
 
 /* animaciones ambientales pausadas fuera de pantalla (effects.js) */
-.paused .ticker, .paused .weld-spark, .paused .weld-spark::after { animation-play-state: paused; }
+.paused .ticker, .paused .spark { animation-play-state: paused; }
 
-/* ── DIVISOR DE SOLDADURA (cordón + destello viajero) ── */
+/* ── DIVISOR DE SOLDADURA (cordón estático — el destello viajero
+   repintaba a ~3Hz de forma permanente y se eliminó) ── */
 .weld-divider {
   position: relative; z-index: 1;
   max-width: var(--max-w); margin: 14px auto; padding: 0 6%;
   height: 26px; overflow: visible;
-  container-type: inline-size; /* habilita unidades cqw para animar con transform */
 }
 .weld-divider svg { width: 100%; height: 26px; display: block; }
 .weld-divider .bead { stroke: var(--line); fill: none; stroke-width: 1.5; }
 .weld-divider .base { stroke: var(--line); stroke-width: 1; opacity: .5; }
-/* destello de soldadura que recorre el cordón */
-.weld-spark {
-  position: absolute; top: 50%; left: 0; width: 7px; height: 7px;
-  border-radius: 50%;
+/* punto de soldadura fijo al inicio del cordón: identidad sin costo */
+.weld-divider::after {
+  content: ''; position: absolute; top: 50%; left: 6%; width: 6px; height: 6px;
+  border-radius: 50%; transform: translateY(-60%);
   background: var(--accent-2);
-  box-shadow: 0 0 8px 2px var(--accent-2), 0 0 22px 6px color-mix(in srgb, var(--accent-3) 55%, transparent);
-  animation: weldtravel 9s linear infinite;
-  will-change: transform;
-}
-.weld-spark::after {
-  content: ''; position: absolute; inset: -3px; border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--accent-3) 80%, transparent), transparent 70%);
-  animation: sparkle .35s ease-in-out infinite;
-}
-@keyframes weldtravel {
-  from { transform: translate(5cqw, -60%); }
-  to   { transform: translate(95cqw, -60%); }
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--accent-2) 50%, transparent);
 }
 
 /* ── MUESTRAS DE PALETA (botón y menú de la nav) ── */
@@ -708,10 +724,15 @@ footer {
 .swatch[data-theme="paper"]     { background: linear-gradient(135deg, #F2EFE7 55%, #2563EB); }
 .swatch[data-theme="coast"]     { background: linear-gradient(135deg, #FF7E67, #0D181B); }
 
-/* transición suave al cambiar de tema */
-body, nav, .bp-card, .exp-panel, .domain-card, .social-link, .contact-panel, .band {
+/* transición suave al cambiar de tema — incluye transform/box-shadow
+   para no anular la animación de hover/tilt de las tarjetas */
+body, nav, .exp-panel, .social-link, .contact-panel, .band {
   transition-property: background-color, background, border-color, color;
   transition-duration: .35s;
+}
+.bp-card, .domain-card {
+  transition: background .35s, border-color .25s, color .35s,
+              transform .2s ease-out, box-shadow .3s;
 }
 
 /* ── ANIMACIONES DE SCROLL (sutiles, escalonadas) ── */
@@ -727,26 +748,22 @@ body, nav, .bp-card, .exp-panel, .domain-card, .social-link, .contact-panel, .ba
   .hero-diagram { max-width: 420px; margin: 0 auto; }
   .readout.r2 { left: 0; }
   .readout.r3 { right: 0; }
-  .domains-grid { grid-template-columns: repeat(2, 1fr); }
-  .exp-layout { grid-template-columns: 1fr; }
+  .domains-layout { grid-template-columns: 1fr; gap: 26px; }
+  .domains-intro { position: static; }
+  /* experiencia en móvil: tabs apilados verticales y compactos.
+     (La fila horizontal con scroll + degradado ocultaba los tabs
+     2 y 3 sin pista de que existían — eran inaccesibles.) */
+  .exp-layout { grid-template-columns: 1fr; gap: 18px; }
   .exp-side { position: static; display: block; }
   .exp-ruler { display: none; }
+  .exp-hint { display: none; }
+  .exp-rail { gap: 6px; }
+  .exp-tab { padding: 11px 14px; }
+  .exp-panel { min-height: 0; }
+
   .project-card.featured .project-fig { flex: none; margin-top: 22px; }
   .contact-panel.has-photo { grid-template-columns: 1fr; }
-  .contact-photo { max-width: 280px; }
-  .exp-rail {
-    position: static; flex-direction: row; overflow-x: auto; gap: 8px;
-    padding-bottom: 8px; scrollbar-width: thin;
-    /* degradado en el borde derecho: pista visual de que hay más tabs */
-    -webkit-mask-image: linear-gradient(90deg, #000 92%, transparent);
-            mask-image: linear-gradient(90deg, #000 92%, transparent);
-  }
-  .exp-hint { display: none; }
-  .exp-tab { border-left: none; border-bottom: 2px solid var(--line); white-space: nowrap; flex-shrink: 0; }
-  .exp-tab.active {
-    border-bottom-color: var(--accent);
-    background: linear-gradient(0deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--bg-panel) 92%, transparent));
-  }
+  .contact-photo { max-width: 280px; margin: 0 auto; width: 100%; }
   .project-card.featured { flex-direction: column; gap: 0; align-items: stretch; }
 }
 
@@ -833,7 +850,7 @@ body, nav, .bp-card, .exp-panel, .domain-card, .social-link, .contact-panel, .ba
 
 /* dedos, no cursor: zonas de toque más generosas */
 @media (pointer: coarse) {
-  .exp-tab { padding: 16px 18px; }
+  .exp-tab { padding: 13px 14px; }
   .theme-opt { padding: 12px 10px; }
   .lang-toggle span { padding: 9px 12px; }
 }
@@ -845,7 +862,6 @@ body, nav, .bp-card, .exp-panel, .domain-card, .social-link, .contact-panel, .ba
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
   html { scroll-behavior: auto; }
   .reveal { opacity: 1; transform: none; }
-  .gridglow { display: none; }
   .ticker { animation: none; flex-wrap: wrap; width: auto; }
   .draw-path { stroke-dashoffset: 0; }
 }

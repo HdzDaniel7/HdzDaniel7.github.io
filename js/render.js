@@ -137,20 +137,24 @@ function renderTicker() {
 
 function renderDomains() {
   $("domains").innerHTML = `
-    <div class="sec-head"><h2>${t(SITE.ui.secDomains)}</h2><span>DWG-002</span></div>
-    <h2 class="sec-title">${hl(SITE.ui.domainsTitle)}</h2>
-    <p class="sec-sub">${t(SITE.ui.subDomains)}</p>
-    <div class="domains-grid">
-      ${SITE.domains.map(d => `
-        <div class="domain-card reveal">
-          <span class="corner c1">+</span><span class="corner c2">+</span>
-          <div class="domain-head">
-            <div class="domain-icon">${ICONS[d.icon] || ICONS.cube}</div>
-            <span class="domain-code">${d.code}</span>
-          </div>
-          <h3>${t(d.name)}</h3>
-          <p>${t(d.desc)}</p>
-        </div>`).join("")}
+    <div class="domains-layout">
+      <div class="domains-intro">
+        <div class="sec-head"><h2>${t(SITE.ui.secDomains)}</h2><span>DWG-002</span></div>
+        <h2 class="sec-title">${hl(SITE.ui.domainsTitle)}</h2>
+        <p class="sec-sub">${t(SITE.ui.subDomains)}</p>
+      </div>
+      <div class="domains-grid">
+        ${SITE.domains.map(d => `
+          <div class="domain-card reveal">
+            <span class="corner c1">+</span><span class="corner c2">+</span>
+            <div class="domain-head">
+              <div class="domain-icon">${ICONS[d.icon] || ICONS.cube}</div>
+              <span class="domain-code">${d.code}</span>
+            </div>
+            <h3>${t(d.name)}</h3>
+            <p>${t(d.desc)}</p>
+          </div>`).join("")}
+      </div>
     </div>`;
   // spotlight que sigue al cursor dentro de cada tarjeta + tilt 3D
   document.querySelectorAll(".domain-card").forEach(c => {
@@ -315,8 +319,7 @@ function renderWeldDividers() {
       <svg viewBox="0 0 1200 26" preserveAspectRatio="none" aria-hidden="true">
         <line class="base" x1="0" y1="19" x2="1200" y2="19"/>
         <path class="bead" d="${path}"/>
-      </svg>
-      <span class="weld-spark"></span>`;
+      </svg>`;
   });
 }
 
