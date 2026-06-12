@@ -9,8 +9,7 @@ function renderProjectPage() {
 
   // nav compartida
   document.getElementById("nav-links").innerHTML = "";
-  document.getElementById("lang-toggle").innerHTML =
-    SITE.lang === "es" ? "<b>ES</b> / EN" : "ES / <b>EN</b>";
+  renderLangToggle();
   renderThemeDots();
 
   if (!p) {
@@ -31,6 +30,11 @@ function renderProjectPage() {
       <div class="measure"><span class="ln"><i>${p.tags.join(" · ")}</i></span></div>
       <p class="detail-long">${t(d.long)}</p>
     </div>
+
+    ${d.flow ? `
+      <div class="flow" aria-label="${SITE.lang === "es" ? "Diagrama de bloques del sistema" : "System block diagram"}">
+        ${d.flow.map(s => `<span class="flow-node">${t(s)}</span>`).join('<span class="flow-arrow" aria-hidden="true">→</span>')}
+      </div>` : ""}
 
     <div class="detail-grid">
       <div class="bp-card">

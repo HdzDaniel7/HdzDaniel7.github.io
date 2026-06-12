@@ -85,13 +85,19 @@ function robotArmSVG() {
 
 function renderNav() {
   const u = SITE.ui;
-  $("nav-links").innerHTML = `
-    <li><a href="index.html#domains">${t(u.navDomains)}</a></li>
-    <li><a href="index.html#experience">${t(u.navExperience)}</a></li>
-    <li><a href="index.html#projects">${t(u.navProjects)}</a></li>
-    <li><a href="index.html#skills">${t(u.navSkills)}</a></li>
-    <li><a href="index.html#contact">${t(u.navContact)}</a></li>`;
-  $("lang-toggle").innerHTML = SITE.lang === "es" ? "<b>ES</b> / EN" : "ES / <b>EN</b>";
+  /* numerados como las secciones del plano (SEC.02, SEC.03…) */
+  const links = [
+    ["02", "domains", u.navDomains],
+    ["03", "experience", u.navExperience],
+    ["04", "projects", u.navProjects],
+    ["05", "skills", u.navSkills],
+    ["06", "education", u.navEducation],
+    ["07", "languages", u.navLanguages],
+    ["08", "contact", u.navContact]
+  ];
+  $("nav-links").innerHTML = links.map(([n, id, label]) =>
+    `<li><a href="index.html#${id}"><i>${n}</i>${t(label)}</a></li>`).join("");
+  renderLangToggle();
   if (window.renderThemeDots) renderThemeDots();
 }
 
@@ -133,9 +139,11 @@ function renderDomains() {
   $("domains").innerHTML = `
     <div class="sec-head"><h2>${t(SITE.ui.secDomains)}</h2><span>DWG-002</span></div>
     <h2 class="sec-title">${hl(SITE.ui.domainsTitle)}</h2>
+    <p class="sec-sub">${t(SITE.ui.subDomains)}</p>
     <div class="domains-grid">
       ${SITE.domains.map(d => `
         <div class="domain-card reveal">
+          <span class="corner c1">+</span><span class="corner c2">+</span>
           <div class="domain-head">
             <div class="domain-icon">${ICONS[d.icon] || ICONS.cube}</div>
             <span class="domain-code">${d.code}</span>
@@ -144,13 +152,14 @@ function renderDomains() {
           <p>${t(d.desc)}</p>
         </div>`).join("")}
     </div>`;
-  // spotlight que sigue al cursor dentro de cada tarjeta
+  // spotlight que sigue al cursor dentro de cada tarjeta + tilt 3D
   document.querySelectorAll(".domain-card").forEach(c => {
     c.addEventListener("mousemove", e => {
       const r = c.getBoundingClientRect();
       c.style.setProperty("--x", (e.clientX - r.left) + "px");
       c.style.setProperty("--y", (e.clientY - r.top) + "px");
     }, { passive: true });
+    if (window.attachTilt) attachTilt(c);
   });
 }
 
@@ -172,16 +181,26 @@ function renderExpPanel() {
 function selectExp(i) { expActive = i; renderExpPanel(); }
 
 function renderExperience() {
+  /* regla de años: del primer año registrado a HOY (o al último año) */
+  const years = SITE.experience.flatMap(e => (t(e.period).match(/20\d\d/g) || []).map(Number));
+  const hasNow = SITE.experience.some(e => /PRESENTE|PRESENT/i.test(t(e.period)));
+  const top = hasNow ? t(SITE.ui.rulerNow) : Math.max(...years);
+  const bottom = Math.min(...years);
+
   $("experience").innerHTML = `
     <div class="sec-head"><h2>${t(SITE.ui.secExperience)}</h2><span>DWG-003 · ${SITE.experience.length} ${SITE.lang === "es" ? "REGISTROS" : "RECORDS"}</span></div>
+    <p class="sec-sub">${t(SITE.ui.subExperience)}</p>
     <div class="exp-layout">
-      <div class="exp-rail">
-        <p class="exp-hint">${t(SITE.ui.expHint)}</p>
-        ${SITE.experience.map((e, i) => `
-          <button type="button" class="exp-tab" onclick="selectExp(${i})">
-            <span class="idx">${String(i + 1).padStart(2, "0")}</span>
-            <span><span class="role">${t(e.role)}</span><span class="co">${t(e.company)} · ${t(e.period)}</span></span>
-          </button>`).join("")}
+      <div class="exp-side">
+        <div class="exp-ruler" aria-hidden="true"><span>${top}</span><span>${bottom}</span></div>
+        <div class="exp-rail">
+          <p class="exp-hint">${t(SITE.ui.expHint)}</p>
+          ${SITE.experience.map((e, i) => `
+            <button type="button" class="exp-tab" onclick="selectExp(${i})">
+              <span class="idx">${String(i + 1).padStart(2, "0")}</span>
+              <span><span class="role">${t(e.role)}</span><span class="co">${t(e.company)} · ${t(e.period)}</span></span>
+            </button>`).join("")}
+        </div>
       </div>
       <div class="exp-panel" id="exp-panel"></div>
     </div>`;
@@ -189,20 +208,22 @@ function renderExperience() {
   renderExpPanel();
 }
 
-/* Banda diagonal de stats globales (se calculan solos) */
+/* Banda diagonal de stats globales (se calculan solos).
+   Un stat con `text` se muestra tal cual, sin contador animado. */
 function renderBand() {
-  const years = new Date().getFullYear() - 2019;
   const stats = [
-    { n: years, pre: "+", label: SITE.ui.bandYears },
+    { text: "EGEL ★", label: SITE.ui.bandEgel },
     { n: SITE.projects.length, pre: "", label: SITE.ui.bandProjects },
     { n: SITE.education.length, pre: "", label: SITE.ui.bandCerts },
-    { n: 2, pre: "", label: SITE.ui.bandLangs }
+    { n: SITE.languages.length, pre: "", label: SITE.ui.bandLangs }
   ];
   $("band").innerHTML = `
     <div class="band-inner">
       ${stats.map(s => `
         <div class="band-stat">
-          <b data-count="${s.n}" data-prefix="${s.pre}" data-suffix="">${s.pre}0</b>
+          ${s.text
+            ? `<b>${s.text}</b>`
+            : `<b data-count="${s.n}" data-prefix="${s.pre}" data-suffix="">${s.pre}0</b>`}
           <small>${t(s.label)}</small>
         </div>`).join("")}
     </div>`;
@@ -211,6 +232,7 @@ function renderBand() {
 function renderProjects() {
   $("projects").innerHTML = `
     <div class="sec-head"><h2>${t(SITE.ui.secProjects)}</h2><span>DWG-004 · ${SITE.projects.length} ${SITE.lang === "es" ? "UNIDADES" : "UNITS"}</span></div>
+    <p class="sec-sub">${t(SITE.ui.subProjects)}</p>
     <div class="projects-grid">
       ${SITE.projects.map((p, i) => `
         <a href="project.html?id=${p.id}" class="bp-card project-card reveal ${i === 0 ? "featured" : ""}">
@@ -223,13 +245,17 @@ function renderProjects() {
             <div class="tags">${p.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
             <span class="project-more">${t(SITE.ui.viewDetail)} →</span>
           </div>
+          ${p.img ? `<figure class="project-fig"><img src="${p.img}" alt="${t(p.title)}" loading="lazy"></figure>` : ""}
         </a>`).join("")}
     </div>`;
+  if (window.attachTilt)
+    document.querySelectorAll(".project-card").forEach(c => attachTilt(c));
 }
 
 function renderSkills() {
   $("skills").innerHTML = `
     <div class="sec-head"><h2>${t(SITE.ui.secSkills)}</h2><span>DWG-005</span></div>
+    <p class="sec-sub">${t(SITE.ui.subSkills)}</p>
     <div class="skills-grid">
       ${SITE.skills.map(g => `
         <div class="bp-card skill-group reveal">
@@ -237,7 +263,8 @@ function renderSkills() {
           <h3>${t(g.group)}</h3>
           <div class="chips">${g.items.map(s => `<span class="chip ${s.level}">${s.name}</span>`).join("")}</div>
         </div>`).join("")}
-    </div>`;
+    </div>
+    <p class="skills-note">${t(SITE.ui.skillsLegend)}</p>`;
 }
 
 function renderEducation() {
@@ -253,6 +280,28 @@ function renderEducation() {
             ${e.note ? `<span class="edu-note">★ ${t(e.note)}</span>` : ""}
           </div>
           <span class="edu-meta">${t(e.meta)}</span>
+        </div>`).join("")}
+    </div>`;
+}
+
+/* Idiomas: escala CEFR (A1…C2) como regla de calibración */
+function renderLanguages() {
+  const CEFR = ["A1", "A2", "B1", "B2", "C1", "C2"];
+  $("languages").innerHTML = `
+    <div class="sec-head"><h2>${t(SITE.ui.secLanguages)}</h2><span>DWG-007 · ${SITE.languages.length} ${SITE.lang === "es" ? "REGISTROS" : "RECORDS"}</span></div>
+    <div class="bp-card lang-rows reveal">
+      <span class="corner c1">+</span><span class="corner c2">+</span>
+      ${SITE.languages.map((l, i) => `
+        <div class="lang-row">
+          <span class="lang-num">${String(i + 1).padStart(2, "0")}</span>
+          <div>
+            <h3>${t(l.name)}</h3>
+            <span class="lang-level">${t(l.level)}</span>
+          </div>
+          <div class="lang-scale" role="img" aria-label="${t(l.name)}: ${t(l.level)}">
+            ${CEFR.map((_, n) => `<i class="${n < l.cefr ? "on" : ""}"></i>`).join("")}
+            <small>${l.native ? "C2+" : CEFR[l.cefr - 1]}</small>
+          </div>
         </div>`).join("")}
     </div>`;
 }
@@ -279,23 +328,49 @@ function renderContact() {
     { ...p.social.email, icon: ICONS.mail }
   ];
   $("contact").innerHTML = `
-    <div class="sec-head"><h2>${t(SITE.ui.secContact)}</h2><span>DWG-007 · ${SITE.lang === "es" ? "FIN DEL PLANO" : "END OF DRAWING"}</span></div>
-    <div class="contact-panel reveal">
-      <p class="contact-desc">${t(p.contactIntro)}</p>
-      <div class="social-grid">
-        ${links.map(l => `
-          <a href="${l.url}" target="_blank" rel="noopener" class="social-link">
-            ${l.icon}
-            <span><span class="social-label">${l.label}</span><span class="social-handle">${l.handle}</span></span>
-          </a>`).join("")}
+    <div class="sec-head"><h2>${t(SITE.ui.secContact)}</h2><span>DWG-008 · ${SITE.lang === "es" ? "FIN DEL PLANO" : "END OF DRAWING"}</span></div>
+    <div class="contact-panel reveal ${p.photo ? "has-photo" : ""}">
+      <span class="corner c1">+</span><span class="corner c2">+</span>
+      <div class="contact-body">
+        <p class="contact-desc">${t(p.contactIntro)}</p>
+        <div class="social-grid">
+          ${links.map(l => `
+            <a href="${l.url}" target="_blank" rel="noopener" class="social-link">
+              ${l.icon}
+              <span><span class="social-label">${l.label}</span><span class="social-handle">${l.handle}</span></span>
+            </a>`).join("")}
+        </div>
       </div>
+      ${p.photo ? `
+        <figure class="contact-photo">
+          <img src="${p.photo}" alt="${p.fullName}">
+          <figcaption>FIG. 08 — ${t(p.role)}</figcaption>
+        </figure>` : ""}
     </div>`;
 }
 
+/* Footer como cajetín de plano (title block) */
 function renderFooter() {
+  const u = SITE.ui;
+  const now = new Date();
+  const date = `${String(now.getMonth() + 1).padStart(2, "0")}.${now.getFullYear()}`;
+  const cells = [
+    [u.ftDrawn, "D. HERNÁNDEZ M."],
+    [u.ftDate, date],
+    [u.ftScale, "1:1"],
+    [u.ftRev, "2.0"],
+    [u.ftSheet, "1/1"]
+  ];
   $("footer-content").innerHTML = `
-    <span>© ${new Date().getFullYear()} ${SITE.profile.fullName}</span>
-    <span>${t(SITE.ui.footerRev)}</span>`;
+    <div class="tblock">
+      <div class="tb-cell tb-name">
+        <small>${t(u.ftProject)}</small>
+        <b>PORTFOLIO — ${SITE.profile.fullName.toUpperCase()}</b>
+      </div>
+      ${cells.map(([label, val]) => `
+        <div class="tb-cell"><small>${t(label)}</small><b>${val}</b></div>`).join("")}
+    </div>
+    <p class="tb-note">© ${now.getFullYear()} · ${t(u.footerNote)}</p>`;
 }
 
 function renderAll() {
@@ -308,11 +383,14 @@ function renderAll() {
   renderProjects();
   renderSkills();
   renderEducation();
+  renderLanguages();
   renderContact();
   renderFooter();
   renderWeldDividers();
   if (window.observeReveals) observeReveals();
   if (window.observeCounters) observeCounters();
+  if (window.observeSections) observeSections();
+  if (window.observeAmbient) observeAmbient();
 }
 
 document.addEventListener("DOMContentLoaded", () => {

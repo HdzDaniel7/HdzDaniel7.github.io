@@ -5,9 +5,12 @@
 
    - id:    único, sin espacios (se usa en la URL: project.html?id=...)
    - icon:  "gear" | "shield" | "music" | "chip" | "cube" | "chart"
+   - img:   imagen de portada para la tarjeta (duotono automático),
+            ej. "assets/projects/weld-cover.png" — o null si no tiene
    - repo:  URL de GitHub (o null si no tiene)
    - detail: contenido de la página propia del proyecto.
      · highlights: lista de logros/características clave
+     · flow: diagrama de bloques del sistema (lista de etapas bilingües)
      · gallery: rutas de imágenes, ej. ["assets/projects/weld-01.png"]
        (crea la carpeta assets/projects/ y sube ahí tus imágenes)
    ══════════════════════════════════════════════════════════════ */
@@ -17,6 +20,7 @@ SITE.projects = [
   {
     id: "laser-weld-validator",
     icon: "gear",
+    img: null,
     title: { es: "Validador de Calidad de Soldadura Láser", en: "Laser Weld Quality Validator" },
     desc: {
       es: "Herramienta Python + Excel para validación automatizada de calidad de soldadura láser. Análisis de imagen según ISO 13919-1 Nivel B con visualización 3D y reportes automáticos.",
@@ -35,6 +39,12 @@ SITE.projects = [
         { es: "Generación automática de reportes de validación listos para auditoría", en: "Automatic generation of audit-ready validation reports" }
       ],
       stack: ["Python", "OpenCV", "Matplotlib", "Excel VBA"],
+      flow: [
+        { es: "IMAGEN DEL CORDÓN", en: "WELD IMAGE" },
+        { es: "ANÁLISIS OPENCV", en: "OPENCV ANALYSIS" },
+        { es: "VALIDACIÓN ISO 13919-1", en: "ISO 13919-1 CHECK" },
+        { es: "REPORTE EXCEL", en: "EXCEL REPORT" }
+      ],
       gallery: []
     }
   },
@@ -42,6 +52,7 @@ SITE.projects = [
   {
     id: "pwm-music-editor",
     icon: "music",
+    img: null,
     title: { es: "Editor de Partituras PWM", en: "PWM Music Score Editor" },
     desc: {
       es: "Editor de partituras embebido que compila partituras digitales personalizadas a código de audio PWM para microcontroladores ESP32 y ATmega328P.",
@@ -60,29 +71,44 @@ SITE.projects = [
         { es: "Generación de audio por PWM sin hardware adicional", en: "PWM audio generation with no extra hardware" }
       ],
       stack: ["C++", "Arduino", "ESP32"],
+      flow: [
+        { es: "PARTITURA DIGITAL", en: "DIGITAL SCORE" },
+        { es: "COMPILADOR", en: "COMPILER" },
+        { es: "CÓDIGO PWM", en: "PWM CODE" },
+        { es: "ESP32 / ATMEGA328P", en: "ESP32 / ATMEGA328P" }
+      ],
       gallery: []
     }
   },
 
   {
-    id: "Nutritional PP",
-    icon: "music",
-    title: { es: "plicación para nutriólogos", en: "Nutriology App" },
+    id: "nutri-app",
+    icon: "chart",
+    img: null,
+    title: { es: "Aplicación de Nutrición Clínica", en: "Clinical Nutrition App" },
     desc: {
-      es: "Aplicación para nutriólogos — gestión de pacientes, planes nutricionales, agenda y más.",
-      en: "Nutriology App - clients, nutritional plans, dates administration."
+      es: "Aplicación web full-stack para nutriólogos: expedientes de pacientes, gráficas de progreso, agenda y planes de alimentación personalizados con exportación a PDF.",
+      en: "Full-stack web app for nutritionists: patient records, progress charts, scheduling, and personalized meal plans with PDF export."
     },
-    tags: ["ESP32", "ATmega328P", "C++", "Embedded"],
+    tags: ["React", "Node.js", "SQLite", "Python"],
     repo: "https://github.com/HdzDaniel7/NutriApp",
     detail: {
       long: {
-        es: "Proyecto personal que une música y sistemas embebidos: un editor que permite escribir partituras digitales y compilarlas a código C++ con generación de audio por PWM, reproducible en microcontroladores de bajo costo.",
-        en: "Personal project bridging music and embedded systems: an editor for writing digital sheet music and compiling it to C++ code with PWM audio generation, playable on low-cost microcontrollers."
+        es: "Aplicación web completa para la práctica clínica de nutrición: gestión de expedientes de pacientes con gráficas de progreso, generación de planes de alimentación personalizados exportables a PDF, y una base de datos de más de 1,600 alimentos mexicanos con macro y micronutrientes.",
+        en: "Complete web application for clinical nutrition practice: patient record management with progress charts, personalized meal plan generation with PDF export, and a database of 1,600+ Mexican foods with macro and micronutrient data."
       },
       highlights: [
-        { es: "Selección de componentes basada en benchmarks por carga de trabajo", en: "Component selection based on per-workload benchmarks" },
+        { es: "Base de datos de más de 1,600 alimentos mexicanos con datos de macro y micronutrientes", en: "Database of 1,600+ Mexican foods with macro and micronutrient data" },
+        { es: "Expedientes de pacientes con gráficas de progreso a lo largo del tratamiento", en: "Patient records with progress charts across the treatment" },
+        { es: "Planes de alimentación personalizados con exportación a PDF", en: "Personalized meal plans with PDF export" }
       ],
-      stack: ["HTML", "Javascrypt", "SQLite", "Python"],
+      stack: ["React", "Node.js", "SQLite", "Python"],
+      flow: [
+        { es: "EXPEDIENTE", en: "PATIENT RECORD" },
+        { es: "BASE DE 1,600 ALIMENTOS", en: "1,600-FOOD DATABASE" },
+        { es: "PLAN PERSONALIZADO", en: "CUSTOM MEAL PLAN" },
+        { es: "PDF", en: "PDF" }
+      ],
       gallery: []
     }
   },
@@ -90,6 +116,7 @@ SITE.projects = [
   {
     id: "gpu-workstations",
     icon: "chip",
+    img: null,
     title: { es: "Workstations GPU de Alto Rendimiento", en: "High-Performance GPU Workstations" },
     desc: {
       es: "Workstations AMD personalizadas para Revit, CAD/CAE y renderizado de larga duración. Optimizadas con benchmarking, ajuste térmico y perfiles de eficiencia energética.",
@@ -107,6 +134,12 @@ SITE.projects = [
         { es: "Perfiles de eficiencia energética para operación 24/7", en: "Power-efficiency profiles for 24/7 operation" }
       ],
       stack: ["AMD GPU", "Hardware", "Benchmarking"],
+      flow: [
+        { es: "CARGA DE TRABAJO", en: "WORKLOAD" },
+        { es: "BENCHMARKS", en: "BENCHMARKS" },
+        { es: "ENSAMBLE", en: "BUILD" },
+        { es: "AJUSTE TÉRMICO", en: "THERMAL TUNING" }
+      ],
       gallery: []
     }
   }

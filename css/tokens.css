@@ -31,34 +31,38 @@
   --radius: 2px;
 }
 
-/* ── PALETA 2: "Fósforo" (sala de control, verde CRT + ámbar) ── */
+/* ── PALETA 2: "Salvia" (CLARA — verde papel botánico) ──
+   Crema verdosa con tinta verde-bosque; acentos esmeralda y teal
+   hundidos para mantener contraste AA sobre fondo claro. */
 [data-theme="phosphor"] {
-  --bg:        #0C120E;
-  --bg-panel:  rgba(15, 21, 17, 0.93);
-  --ink:       #F1F6F2;
-  --ink-soft:  #C5CEC8;
-  --muted:     #7E8A81;
-  --accent:    #3DDC97;
-  --accent-2:  #A9F5CE;
-  --accent-3:  #F5C45E;
-  --grid:      rgba(80, 200, 140, 0.05);
-  --grid-glow: rgba(169, 245, 206, 0.18);
-  --line:      rgba(130, 175, 150, 0.22);
+  --bg:        #EDF3EE;                  /* crema verdosa */
+  --bg-panel:  rgba(252, 254, 250, 0.92);
+  --ink:       #1D2A22;                  /* tinta verde-bosque */
+  --ink-soft:  #3E5147;
+  --muted:     #6F7F75;
+  --accent:    #177E54;                  /* esmeralda hundido */
+  --accent-2:  #0F766E;                  /* teal oscuro (hover/links legibles) */
+  --accent-3:  #A16207;                  /* ocre (anotaciones) */
+  --grid:      rgba(23, 126, 84, 0.07);
+  --grid-glow: rgba(15, 118, 110, 0.22);
+  --line:      rgba(60, 95, 75, 0.25);
 }
 
-/* ── PALETA 3: "Brasa" (taller, sepia oscuro + cobre) ── */
+/* ── PALETA 3: "Arcilla" (CLARA — arena cálida + terracota + teal) ──
+   Terracota como primario y teal profundo como interacción:
+   pareja cálido/frío que funciona sin competir con el texto. */
 [data-theme="ember"] {
-  --bg:        #14100B;
-  --bg-panel:  rgba(24, 19, 14, 0.93);
-  --ink:       #F6F2EB;
-  --ink-soft:  #D2CABE;
-  --muted:     #948A7B;
-  --accent:    #F09A4B;
-  --accent-2:  #FFD9A0;
-  --accent-3:  #7FD0BC;
-  --grid:      rgba(220, 170, 110, 0.05);
-  --grid-glow: rgba(255, 217, 160, 0.16);
-  --line:      rgba(190, 160, 120, 0.22);
+  --bg:        #F4EEE6;                  /* arena cálida */
+  --bg-panel:  rgba(255, 251, 244, 0.92);
+  --ink:       #2A211A;                  /* tinta sepia oscura */
+  --ink-soft:  #4E4337;
+  --muted:     #87796A;
+  --accent:    #B5491E;                  /* terracota hundido */
+  --accent-2:  #0F6B66;                  /* teal profundo (hover/links legibles) */
+  --accent-3:  #8C6A14;                  /* ocre dorado (anotaciones) */
+  --grid:      rgba(181, 73, 30, 0.06);
+  --grid-glow: rgba(15, 107, 102, 0.20);
+  --line:      rgba(115, 90, 65, 0.26);
 }
 
 /* ── PALETA 5: "Papel" (CLARA — plano técnico impreso en papel) ──
@@ -94,17 +98,19 @@
   --line:      rgba(125, 165, 155, 0.22);
 }
 
-/* ── PALETA 4: "Ion" (laboratorio, violeta + lavanda + menta) ── */
+/* ── PALETA 4: "Ion" (laboratorio — violeta + menta + durazno) ──
+   Como Costa: el morado frío se acompaña de una menta (interacción)
+   y un durazno cálido (anotaciones) que combinan sin opacar el texto. */
 [data-theme="ion"] {
   --bg:        #100C18;
   --bg-panel:  rgba(18, 14, 27, 0.93);
   --ink:       #F4F1F9;
   --ink-soft:  #CBC5D6;
   --muted:     #867E97;
-  --accent:    #A78BFA;
-  --accent-2:  #D8B4FE;
-  --accent-3:  #5EEAD4;
+  --accent:    #A78BFA;                  /* violeta — primario */
+  --accent-2:  #7DEDD3;                  /* menta — interacción/hover */
+  --accent-3:  #FFB997;                  /* durazno — anotaciones */
   --grid:      rgba(160, 130, 220, 0.05);
-  --grid-glow: rgba(216, 180, 254, 0.18);
+  --grid-glow: rgba(125, 237, 211, 0.18);
   --line:      rgba(150, 135, 180, 0.22);
 }

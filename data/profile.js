@@ -14,10 +14,14 @@ SITE.profile = {
     en: "MECHATRONICS ENGINEER"
   },
 
+  /* Retrato técnico en la sección de contacto (duotono automático).
+     Sube tu foto a assets/ y pon aquí la ruta, ej. "assets/me.jpg" */
+  photo: "./data/Foto.jpg",
+
   // Línea de cota animada bajo el nombre
   measureLabel: {
     es: "L = automatización de procesos",
-    en: "L = process automation"
+    en: "L = process automation",
   },
 
   // Líneas tipo terminal bajo el nombre

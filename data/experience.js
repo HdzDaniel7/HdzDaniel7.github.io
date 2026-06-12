@@ -12,7 +12,7 @@ window.SITE = window.SITE || {};
 SITE.experience = [
   {
     role:    { es: "Practicante de Proyectos", en: "Projects Intern" },
-    company: "Empresa",                     // ← TODO: nombre real de la empresa
+    company: "MUVIQ",                     // ← TODO: nombre real de la empresa
     location: "San Luis Potosí",
     period:  { es: "FEB 2025 → OCT 2025", en: "FEB 2025 → OCT 2025" },
     bullets: [
