@@ -55,11 +55,5 @@ SITE.education = [
     meta: { es: "LinkedIn · 2026", en: "LinkedIn · 2026" },
     note: null,
     highlight: false
-  },
-  {
-    name: { es: "Inglés B2 — Certificación TOEFL-ITP", en: "English B2 — TOEFL-ITP Certified" },
-    meta: { es: "ETS · San Luis Potosí", en: "ETS · San Luis Potosí" },
-    note: null,
-    highlight: false
   }
 ];
