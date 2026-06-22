@@ -58,7 +58,5 @@ function renderProjectPage() {
     <footer style="border:none;margin-top:60px"></footer>`;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.documentElement.lang = SITE.lang;
-  renderProjectPage();
-});
+/* El render lo dispara js/data-loader.js cuando los datos JSON
+   ya están cargados en window.SITE (ver loadSiteData). */

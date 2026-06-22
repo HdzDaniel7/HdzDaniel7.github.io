@@ -396,7 +396,5 @@ function renderAll() {
   if (window.observeAmbient) observeAmbient();
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.documentElement.lang = SITE.lang;
-  renderAll();
-});
+/* El render lo dispara js/data-loader.js cuando los datos JSON
+   ya están cargados en window.SITE (ver loadSiteData). */

@@ -1,0 +1,19 @@
+# Contexto privado para Claude — se lee localmente pero no se publica
+CLAUDE.md
+CLAUDE.local.md
+
+# Salida/caché de la skill graphify (artefacto generado, no es código fuente)
+graphify-out/
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# Editores
+*.swp
+
+# Mockup desechable del editor (no publicar)
+editor-mockup.html
+
+# Plan interno del editor (estrategia/token/proxy — no publicar)
+docs/editor-plan.md
