@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Editor · Portafolio</title>
+<link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/editor.css">
+</head>
+<body>
+
+<!-- fondo decorativo (selva oscuro / ginkgo claro) — detrás de todo -->
+<div class="ed-bg" aria-hidden="true">
+  <svg class="ed-foliage" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <symbol id="lf" viewBox="0 0 100 60"><path d="M2 30 C 25 -8 75 -8 98 30 C 75 68 25 68 2 30 Z"/></symbol>
+      <g id="frond">
+        <path d="M2 48 C 70 16 150 16 208 20" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".6"/>
+        <use href="#lf" width="48" height="29" transform="translate(20,30) rotate(-34)"/>
+        <use href="#lf" width="44" height="26" transform="translate(28,42) rotate(32)"/>
+        <use href="#lf" width="48" height="29" transform="translate(70,22) rotate(-30)"/>
+        <use href="#lf" width="44" height="26" transform="translate(78,32) rotate(28)"/>
+        <use href="#lf" width="44" height="26" transform="translate(120,16) rotate(-26)"/>
+        <use href="#lf" width="40" height="24" transform="translate(126,26) rotate(26)"/>
+        <use href="#lf" width="36" height="22" transform="translate(168,14) rotate(-18)"/>
+        <use href="#lf" width="30" height="18" transform="translate(202,16)"/>
+      </g>
+      <g id="ginkgo">
+        <path d="M0,0 C -22,-6 -32,-20 -22,-34 C -11,-47 11,-47 22,-34 C 32,-20 22,-6 0,0 Z"/>
+        <path d="M0,12 V 0" stroke="currentColor" stroke-width="2" fill="none"/>
+        <path d="M0,-2 L -9,-30 M0,-2 V -36 M0,-2 L 9,-30" stroke="rgba(0,0,0,.12)" stroke-width="1" fill="none"/>
+      </g>
+    </defs>
+    <!-- oscuro: frondas colgando (esquina derecha) -->
+    <g class="fol fol-dark">
+      <use href="#frond" transform="translate(1262,40) rotate(150) scale(1.5)" style="color:#3f8f63" fill="#3f8f63" opacity=".16"/>
+      <use href="#frond" transform="translate(1186,-8) rotate(122) scale(1.2)" style="color:#7d5cc0" fill="#7d5cc0" opacity=".14"/>
+      <use href="#frond" transform="translate(1272,820) rotate(-146) scale(1.35)" style="color:#3f8f63" fill="#3f8f63" opacity=".13"/>
+    </g>
+    <!-- claro: ginkgos (esquina derecha) -->
+    <g class="fol fol-light">
+      <g transform="translate(1150,84) scale(2.4) rotate(166)" style="color:#4fae8c" fill="#4fae8c" opacity=".5"><use href="#ginkgo"/></g>
+      <g transform="translate(1086,156) scale(1.9) rotate(150)" style="color:#8f73c9" fill="#8f73c9" opacity=".42"><use href="#ginkgo"/></g>
+      <g transform="translate(1182,44) scale(1.7) rotate(188)" style="color:#4fae8c" fill="#4fae8c" opacity=".42"><use href="#ginkgo"/></g>
+      <g transform="translate(1150,720) scale(2.3) rotate(20)" style="color:#4fae8c" fill="#4fae8c" opacity=".5"><use href="#ginkgo"/></g>
+      <g transform="translate(1076,762) scale(1.8) rotate(-12)" style="color:#8f73c9" fill="#8f73c9" opacity=".42"><use href="#ginkgo"/></g>
+    </g>
+  </svg>
+  <div class="ed-particles" id="ed-particles"></div>
+</div>
+
+<header class="ed-top">
+  <span class="ed-brand">EDITOR</span>
+  <span class="ed-note" id="ed-status">cargando…</span>
+  <span class="spacer"></span>
+  <button type="button" class="ed-btn" id="ed-theme" title="Cambiar tema claro/oscuro">🌙</button>
+  <button type="button" class="ed-btn" id="ed-token" title="Configurar token de GitHub">🔑 Token</button>
+  <a class="ed-btn" href="index.html" target="_blank" rel="noopener">Ver sitio ↗</a>
+  <button type="button" class="ed-btn" id="ed-download" title="Descargar el JSON del área">Descargar</button>
+  <button type="button" class="ed-btn primary" id="ed-publish" title="Commit directo a GitHub">Publicar ↑</button>
+</header>
+
+<div class="ed-cols">
+  <section class="ed-col">
+    <header class="ed-col-head"><b>A-01</b> Áreas</header>
+    <nav class="ed-areas" id="ed-areas" aria-label="Áreas"></nav>
+  </section>
+
+  <section class="ed-col">
+    <header class="ed-col-head"><b>A-02</b> Entradas <span class="ed-count" id="ed-count"></span></header>
+    <div class="ed-entries-head">
+      <input type="text" class="ed-search" id="ed-search" placeholder="🔍 buscar…">
+      <button type="button" class="ed-btn" id="ed-add">+ Nueva</button>
+    </div>
+    <ul class="ed-entry-list" id="ed-entry-list"></ul>
+  </section>
+
+  <section class="ed-col">
+    <header class="ed-col-head"><b>A-03</b> Editar</header>
+    <div class="ed-form-wrap"><div id="ed-form"></div></div>
+  </section>
+</div>
+
+<script src="js/editor.js"></script>
+</body>
+</html>

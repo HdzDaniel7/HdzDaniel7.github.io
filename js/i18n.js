@@ -3,69 +3,8 @@
    ══════════════════════════════════════════════════ */
 window.SITE = window.SITE || {};
 
-/* Textos fijos de la interfaz (no son datos del CV) */
-SITE.ui = {
-  navDomains:    { es: "Sistemas",    en: "Systems" },
-  navExperience: { es: "Experiencia", en: "Experience" },
-  navProjects:   { es: "Proyectos",   en: "Projects" },
-  navSkills:     { es: "Habilidades", en: "Skills" },
-  navEducation:  { es: "Educación",   en: "Education" },
-  navLanguages:  { es: "Idiomas",     en: "Languages" },
-  navContact:    { es: "Contacto",    en: "Contact" },
-
-  secDomains:    { es: "SEC.02 / MAPA DE SISTEMAS", en: "SEC.02 / SYSTEM MAP" },
-  secExperience: { es: "SEC.03 / EXPERIENCIA", en: "SEC.03 / EXPERIENCE" },
-  secProjects:   { es: "SEC.04 / PROYECTOS",   en: "SEC.04 / PROJECTS" },
-  secSkills:     { es: "SEC.05 / HABILIDADES", en: "SEC.05 / SKILLS" },
-  secEducation:  { es: "SEC.06 / EDUCACIÓN",   en: "SEC.06 / EDUCATION" },
-  secLanguages:  { es: "SEC.07 / IDIOMAS",     en: "SEC.07 / LANGUAGES" },
-  secContact:    { es: "SEC.08 / CONTACTO",    en: "SEC.08 / CONTACT" },
-
-  domainsTitle:  { es: "Sistemas que **domino**", en: "Systems I **work with**" },
-
-  /* frases humanas bajo cada encabezado de sección */
-  subDomains: {
-    es: "Tres frentes que se cruzan en cada proyecto: el proceso, el dato y la máquina.",
-    en: "Three fronts that meet in every project: the process, the data, and the machine."
-  },
-  subExperience: {
-    es: "Del piso de producción automotriz a las herramientas que lo miden.",
-    en: "From the automotive shop floor to the tools that measure it."
-  },
-  subProjects: {
-    es: "Sistemas construidos para resolver problemas reales — varios siguen en uso activo.",
-    en: "Systems built to solve real problems — several remain in active use."
-  },
-  subSkills: {
-    es: "Las herramientas que uso a diario, y las que estoy afilando.",
-    en: "The tools I use daily, and the ones I'm sharpening."
-  },
-  bandEgel:      { es: "examen de egreso sobresaliente", en: "outstanding exit exam result" },
-  bandProjects:  { es: "proyectos documentados", en: "documented projects" },
-  bandCerts:     { es: "certificaciones", en: "certifications" },
-  bandLangs:     { es: "idiomas", en: "languages" },
-  expHint:       { es: "// selecciona un registro", en: "// select a record" },
-
-  heroFig:    { es: "FIG. 01 — PERFIL / INGENIERO MECATRÓNICO", en: "FIG. 01 — PROFILE / MECHATRONICS ENGINEER" },
-  ctaContact: { es: "Contáctame", en: "Get in touch" },
-  viewGithub: { es: "Ver en GitHub", en: "View on GitHub" },
-  viewDetail: { es: "Ver proyecto", en: "View project" },
-  backHome:   { es: "← Volver al inicio", en: "← Back to home" },
-  highlights: { es: "Puntos clave", en: "Highlights" },
-  stack:      { es: "Stack técnico", en: "Tech stack" },
-  notFound:   { es: "Proyecto no encontrado.", en: "Project not found." },
-  skillsLegend: { es: "◌ = en desarrollo", en: "◌ = in progress" },
-  rulerNow:   { es: "HOY", en: "NOW" },
-
-  /* cajetín del footer (title block de plano) */
-  ftProject: { es: "PROYECTO", en: "PROJECT" },
-  ftDrawn:   { es: "DIBUJÓ",   en: "DRAWN BY" },
-  ftDate:    { es: "FECHA",    en: "DATE" },
-  ftScale:   { es: "ESCALA",   en: "SCALE" },
-  ftRev:     { es: "REVISIÓN", en: "REVISION" },
-  ftSheet:   { es: "HOJA",     en: "SHEET" },
-  footerNote: { es: "HECHO A MANO, SIN PLANTILLAS", en: "HANDCRAFTED, NO TEMPLATES" }
-};
+/* Los textos fijos de interfaz (SITE.ui) ahora viven en data/ui.json y los
+   carga js/data-loader.js antes de renderizar (editables desde el editor). */
 
 /* idioma activo: localStorage → idioma del navegador → 'en' */
 SITE.lang = localStorage.getItem("lang")
@@ -144,10 +83,32 @@ function t(x) {
   return x[SITE.lang] || x.en || x.es || "";
 }
 
-/* hl(texto): convierte **resaltado** en <span class="hl"> */
-function hl(text) {
-  return t(text).replace(/\*\*(.+?)\*\*/g, '<span class="hl">$1</span>');
+/* Markdown ligero → HTML. Pensado para contenido propio del sitio (no escapa
+   HTML). Reglas, en orden seguro:
+     [texto](https://url)  → enlace (target=_blank)
+     **texto**             → <span class="hl">  (resaltado, firma del sitio)
+     *texto*               → <em> (cursiva)
+     renglones que empiezan con "- " → lista <ul><li>
+     saltos de línea restantes → <br>
+   El contenido de una sola línea con solo **negrita** se renderiza igual que
+   antes, así que es retrocompatible con todo el contenido existente. */
+function mdLite(text) {
+  let s = t(text);
+  s = s.replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,
+                '<a href="$2" target="_blank" rel="noopener">$1</a>');
+  s = s.replace(/\*\*(.+?)\*\*/g, '<span class="hl">$1</span>');
+  s = s.replace(/\*([^*\n]+?)\*/g, '<em>$1</em>');
+  s = s.replace(/(?:^|\n)((?:- [^\n]*(?:\n|$))+)/g, block => {
+    const items = block.trim().split("\n").map(l => l.replace(/^- /, "").trim());
+    return "<ul>" + items.map(i => "<li>" + i + "</li>").join("") + "</ul>";
+  });
+  s = s.replace(/\n/g, "<br>");
+  return s;
 }
+
+/* hl() (resaltado) y md() comparten el mismo motor de Markdown ligero. */
+var hl = mdLite;
+var md = mdLite;
 
 function toggleLang() {
   SITE.lang = SITE.lang === "es" ? "en" : "es";

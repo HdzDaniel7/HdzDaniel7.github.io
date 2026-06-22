@@ -12,8 +12,9 @@ Thumbs.db
 # Editores
 *.swp
 
-# Mockup desechable del editor (no publicar)
+# Mockups/pruebas desechables (no publicar)
 editor-mockup.html
+bg-preview.html
 
 # Plan interno del editor (estrategia/token/proxy — no publicar)
 docs/editor-plan.md

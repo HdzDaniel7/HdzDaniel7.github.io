@@ -572,6 +572,8 @@ h1 span {
 .edu-num { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
 .edu-row h3 { font-size: 15px; font-weight: 600; display: inline; }
 .edu-row .edu-note { font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-2); margin-left: 10px; white-space: nowrap; }
+.edu-row .edu-links { display: inline-flex; gap: 10px; margin-left: 10px; }
+.edu-row .edu-links a { font-family: var(--font-mono); font-size: 10.5px; color: var(--accent); border-bottom: 1px dotted currentColor; }
 .edu-row.highlight h3 { color: var(--accent-2); }
 .edu-row .edu-meta { font-family: var(--font-mono); font-size: 11px; color: var(--muted); text-align: right; white-space: nowrap; }
 
@@ -681,6 +683,9 @@ footer {
 .detail-grid li::before { content: '▸'; position: absolute; left: 0; color: var(--accent); font-size: 11px; top: 4px; }
 .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 36px; }
 .gallery img { width: 100%; border: 1px solid var(--line); }
+/* video embebido (YouTube/Vimeo): contenedor responsivo 16:9 */
+.video-embed { position: relative; width: 100%; aspect-ratio: 16 / 9; border: 1px solid var(--line); }
+.video-embed iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
 
 /* diagrama de flujo del sistema (bloques → como esquema de bloques) */
 .flow { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 32px; }

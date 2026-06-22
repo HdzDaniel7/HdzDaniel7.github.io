@@ -118,6 +118,9 @@ function renderHero() {
         <div class="hero-cta">
           <a href="#contact" class="btn btn-primary">${t(SITE.ui.ctaContact)} ${ICONS.arrow}</a>
           <a href="${p.social.github.url}" target="_blank" rel="noopener" class="btn btn-ghost">${ICONS.github} GitHub</a>
+          ${(p.cv && (p.cv[SITE.lang] || p.cv.es || p.cv.en))
+            ? `<a href="${p.cv[SITE.lang] || p.cv.es || p.cv.en}" target="_blank" rel="noopener" class="btn btn-ghost">${SITE.lang === "es" ? "CV" : "Resume"} ↓</a>`
+            : ""}
         </div>
       </div>
       <div class="hero-diagram">
@@ -152,7 +155,7 @@ function renderDomains() {
               <span class="domain-code">${d.code}</span>
             </div>
             <h3>${t(d.name)}</h3>
-            <p>${t(d.desc)}</p>
+            <p>${md(d.desc)}</p>
           </div>`).join("")}
       </div>
     </div>`;
@@ -245,7 +248,7 @@ function renderProjects() {
           <div class="project-body">
             <div class="project-icon">${ICONS[p.icon] || ICONS.cube}</div>
             <h3>${t(p.title)}</h3>
-            <p>${t(p.desc)}</p>
+            <p>${md(p.desc)}</p>
             <div class="tags">${p.tags.map(tag => `<span class="tag">${tag}</span>`).join("")}</div>
             <span class="project-more">${t(SITE.ui.viewDetail)} →</span>
           </div>
@@ -282,6 +285,7 @@ function renderEducation() {
           <div>
             <h3>${t(e.name)}</h3>
             ${e.note ? `<span class="edu-note">★ ${t(e.note)}</span>` : ""}
+            ${(e.links && e.links.length) ? `<span class="edu-links">${e.links.map(l => `<a href="${l.url}" target="_blank" rel="noopener">${t(l.label) || "ID ↗"}</a>`).join("")}</span>` : ""}
           </div>
           <span class="edu-meta">${t(e.meta)}</span>
         </div>`).join("")}
@@ -335,7 +339,7 @@ function renderContact() {
     <div class="contact-panel reveal ${p.photo ? "has-photo" : ""}">
       <span class="corner c1">+</span><span class="corner c2">+</span>
       <div class="contact-body">
-        <p class="contact-desc">${t(p.contactIntro)}</p>
+        <p class="contact-desc">${md(p.contactIntro)}</p>
         <div class="social-grid">
           ${links.map(l => `
             <a href="${l.url}" target="_blank" rel="noopener" class="social-link">

@@ -8,6 +8,7 @@ window.SITE = window.SITE || {};
 
 /* clave de SITE → archivo JSON */
 const SITE_DATA_FILES = {
+  ui:         "data/ui.json",
   profile:    "data/profile.json",
   domains:    "data/domains.json",
   ticker:     "data/ticker.json",
