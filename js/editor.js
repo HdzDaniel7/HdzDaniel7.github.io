@@ -262,22 +262,26 @@ function control(field, get, set) {
     if (v == null || typeof v !== "object") { v = { es: "", en: "" }; set(v); }
     const wrap = el("div", "ed-bi");
     const inputs = {};
+    const badge = el("div", "ed-tstatus");
+    const refresh = () => setBadge(badge, tStatus(v));
     ["es", "en"].forEach(lang => {
       const line = el("div", "ed-lang-line");
       line.appendChild(el("span", "ed-lang-tag" + (lang === "en" ? " en" : ""), { textContent: lang.toUpperCase() }));
       const inp = field.type === "bilingualArea"
         ? el("textarea", "ed-textarea", { rows: 3, value: v[lang] || "" })
         : el("input", "ed-input", { type: "text", value: v[lang] || "" });
-      inp.addEventListener("input", () => { v[lang] = inp.value; });
       inputs[lang] = inp;
+      if (lang === "es") inp.addEventListener("input", () => { v.es = inp.value; refresh(); });
+      else inp.addEventListener("input", () => { v.en = inp.value; const i = tInfo(v); i.locked = true; i.snap = v.es; refresh(); });
       line.appendChild(inp);
       if (lang === "en") {
         const tr = el("button", "ed-tr", { type: "button", textContent: "⇄", title: "Traducir ES → EN" });
-        tr.addEventListener("click", () => translateField(v, inputs.en, tr));
+        tr.addEventListener("click", () => translateField(v, inputs.en, tr, refresh));
         line.appendChild(tr);
       }
       wrap.appendChild(line);
     });
+    wrap.appendChild(badge); refresh();
     return wrap;
   }
   if (field.type === "list") {
@@ -346,19 +350,57 @@ function listControl(field, get) {
   return box;
 }
 
+/* ── estado de traducción por campo bilingüe (en memoria, NO se guarda en el JSON) ──
+   Cada {es,en} recuerda de qué ES salió su EN (snap) y si lo editaste a mano (locked):
+   · empty  = EN vacío           · ok       = EN al día (ES == snap)
+   · stale  = ES cambió (⚠)      · locked   = editaste el EN tú (🔒, no se pisa) */
+const tState = new WeakMap();
+function tInfo(v) { let i = tState.get(v); if (!i) { i = { snap: v.es || "", locked: false }; tState.set(v, i); } return i; }
+function tStatus(v) {
+  if (!(v.en && v.en.trim())) return "empty";
+  if (tInfo(v).locked) return "locked";
+  if ((v.es || "") !== tInfo(v).snap) return "stale";
+  return "ok";
+}
+function setBadge(b, st) {
+  b.className = "ed-tstatus " + st;
+  b.textContent = st === "empty" ? "EN vacío"
+    : st === "stale" ? "EN desactualizado ⚠ (el ES cambió)"
+    : st === "locked" ? "EN propio 🔒" : "EN ✓";
+}
+function collectBilinguals(node, acc) {
+  if (Array.isArray(node)) node.forEach(n => collectBilinguals(n, acc));
+  else if (node && typeof node === "object") {
+    if (typeof node.es === "string" && typeof node.en === "string") acc.push(node);
+    else for (const k in node) collectBilinguals(node[k], acc);
+  }
+  return acc;
+}
+/* traduce los EN vacíos o desactualizados del área (respeta los 🔒) */
+async function autoTranslatePending(area) {
+  let n = 0;
+  for (const v of collectBilinguals(state.data[area.key], [])) {
+    const st = tStatus(v);
+    if ((st === "empty" || st === "stale") && (v.es || "").trim()) {
+      try { const out = await translateES_EN(v.es); if (out) { v.en = out; const i = tInfo(v); i.snap = v.es; i.locked = false; n++; } } catch (e) { /* continúa */ }
+    }
+  }
+  return n;
+}
+
 /* ── traducción ES→EN (MyMemory, directo desde el navegador) ── */
 async function translateES_EN(text) {
   const url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) + "&langpair=es|en";
   const j = await fetch(url).then(r => r.json());
   return (j.responseData && j.responseData.translatedText) || "";
 }
-async function translateField(v, enInput, btn) {
+async function translateField(v, enInput, btn, refresh) {
   const src = (v.es || "").trim();
   if (!src) { toast("Escribe primero el texto en español."); return; }
   btn.disabled = true; const old = btn.textContent; btn.textContent = "…";
   try {
     const out = await translateES_EN(src);
-    if (out) { v.en = out; enInput.value = out; }
+    if (out) { v.en = out; enInput.value = out; const i = tInfo(v); i.snap = v.es; i.locked = false; if (refresh) refresh(); }
   } catch (e) { toast("No se pudo traducir (revisa tu conexión)."); }
   finally { btn.disabled = false; btn.textContent = old; }
 }
@@ -605,10 +647,14 @@ async function ghPut(path, base64, message) {
 async function publish() {
   if (!ghToken()) { toast("Configura tu token (🔑) para publicar."); openTokenModal(); return; }
   const area = currentArea();
-  const issues = validate(area);
-  if (issues.length && !confirm("Avisos:\n\n" + issues.join("\n") + "\n\n¿Publicar de todas formas?")) return;
-  const btn = $("ed-publish"); btn.disabled = true; const old = btn.textContent; btn.textContent = "Publicando…";
+  const btn = $("ed-publish"); btn.disabled = true; const old = btn.textContent;
   try {
+    btn.textContent = "Traduciendo…";
+    const n = await autoTranslatePending(area);
+    if (n) { renderForm(); toast(`Traducidos ${n} campo(s) EN pendientes.`); }
+    const issues = validate(area);
+    if (issues.length && !confirm("Avisos:\n\n" + issues.join("\n") + "\n\n¿Publicar de todas formas?")) return;
+    btn.textContent = "Publicando…";
     await ghPut(area.file, toB64Utf8(buildAreaText(area)), `editor: actualiza ${area.file}`);
     toast(`Publicado ✓ ${area.file} — el sitio se actualiza en ~1 min.`);
   } catch (e) { toast("Error al publicar: " + e.message); }
@@ -634,10 +680,12 @@ function openTokenModal() {
   const row = el("div", "ed-modal-acts");
   const clear = el("button", "ed-btn", { type: "button", textContent: "Borrar" });
   const save = el("button", "ed-btn primary", { type: "button", textContent: "Guardar" });
-  const close = () => overlay.remove();
+  const onKey = e => { if (e.key === "Escape") close(); };
+  const close = () => { overlay.remove(); document.removeEventListener("keydown", onKey); };
   clear.addEventListener("click", () => { localStorage.removeItem("gh-token"); updateTokenUI(); close(); toast("Token borrado."); });
   save.addEventListener("click", () => { localStorage.setItem("gh-token", inp.value.trim()); updateTokenUI(); close(); toast("Token guardado en este navegador."); });
   overlay.addEventListener("click", e => { if (e.target === overlay) close(); });
+  document.addEventListener("keydown", onKey);
   row.append(clear, save); box.appendChild(row); overlay.appendChild(box); document.body.appendChild(overlay); inp.focus();
 }
 function updateTokenUI() { const b = $("ed-token"); if (b) b.textContent = ghToken() ? "🔑 ✓" : "🔑 Token"; }

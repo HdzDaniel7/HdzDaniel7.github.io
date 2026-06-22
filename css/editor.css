@@ -150,6 +150,12 @@ a { color: var(--accent-2); }
   border-radius: var(--radius); padding: 0 10px; cursor: pointer; }
 .ed-tr:hover { background: color-mix(in srgb, var(--accent-2) 14%, transparent); }
 .ed-tr[disabled] { opacity: .5; cursor: default; }
+/* estado de traducción por campo */
+.ed-tstatus { font-size: 10px; letter-spacing: .4px; margin-top: 2px; min-height: 12px; }
+.ed-tstatus.ok { color: var(--muted); }
+.ed-tstatus.empty { color: var(--muted); opacity: .7; }
+.ed-tstatus.stale { color: var(--accent-3); }
+.ed-tstatus.locked { color: var(--accent); }
 
 /* chips para listas de texto (tags, stack, coords, ticker) */
 .ed-chips { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }

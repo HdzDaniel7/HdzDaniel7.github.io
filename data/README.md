@@ -1,62 +1,56 @@
-# 📂 Guía rápida — Cómo actualizar tu información
+# 📂 Contenido del sitio — cómo actualizarlo
 
-Toda tu información vive en esta carpeta. **Nunca necesitas tocar HTML, CSS ni el código JS** para actualizar contenido.
+Todo el contenido del portafolio vive en esta carpeta como **archivos JSON**.
+**Nunca necesitas tocar HTML, CSS ni JS** para cambiar contenido.
 
-## Reglas generales
+## Forma fácil (recomendada): el editor
 
-- Todo texto bilingüe se escribe como `{ es: "texto en español", en: "text in english" }`.
-- Dentro de un bullet, escribe `**texto**` para **resaltarlo** visualmente.
-- El orden de los elementos en cada archivo = orden en que aparecen en la página (pon lo más reciente primero).
-- Después de editar, guarda y haz commit + push. GitHub Pages se actualiza solo.
+Abre **`editor.html`** (en local: `http://localhost:8000/editor.html`).
 
-## Agregar una experiencia nueva → `experience.js`
+- Edita todas las áreas desde formularios: Proyectos, Experiencia, Habilidades,
+  Educación, Idiomas, Dominios, Ticker, Perfil y Textos UI.
+- Agregar / reordenar (↑↓) / duplicar (⎘) / borrar (✕) / buscar.
+- Sube **fotos** con el botón ⬆ (van a `assets/projects/`).
+- Botón **⇄** traduce ES→EN; al **Publicar** rellena los inglés que falten.
+- **Publicar ↑** hace el commit a GitHub por ti (necesita pegar una vez tu token
+  en **🔑 Token**). **Descargar** es la alternativa sin token: bajas el JSON y lo
+  colocas aquí a mano.
 
-Copia este bloque y pégalo **al inicio** del array `SITE.experience`:
+## Forma manual (avanzada): editar el JSON
 
-```js
-{
-  role:    { es: "Tu puesto", en: "Your role" },
-  company: "Nombre de la empresa",
-  location: "Ciudad",
-  period:  { es: "ENE 2026 → PRESENTE", en: "JAN 2026 → PRESENT" },
-  bullets: [
-    {
-      es: "Logré X **mejorando Y en 25%** con la herramienta Z.",
-      en: "Achieved X by **improving Y by 25%** using tool Z."
-    }
-  ]
-},
+Puedes editar cualquier `data/*.json` directamente. Reglas:
+
+- Texto bilingüe = `{ "es": "…", "en": "…" }`. **Nunca dejes un idioma vacío.**
+- Dentro de la prosa: `**negrita**` (resaltado), `*cursiva*`, `[texto](url)`,
+  listas con `- `. (Markdown ligero.)
+- El **orden** de cada array = orden en la página (lo más reciente arriba).
+- Tras editar, guarda y haz **commit + push**; GitHub Pages se actualiza solo.
+- ⚠️ Es JSON estricto: comillas dobles, **sin** comas finales, **sin** comentarios.
+
+## Esquemas
+
+| Archivo | Forma |
+|---|---|
+| `profile.json` | objeto: nombre, rol, `photo`, `taglines[]`, `stats[]`, `social{}`, `contactIntro`, `cv{es,en}` |
+| `projects.json` | array de `{ id, icon, img, title, desc, tags[], links[], detail{ long, highlights[], stack[], flow[], media[] } }` |
+| `experience.json` | array de `{ role, company, location, period, bullets[] }` |
+| `skills.json` | array de grupos `{ group, items:[{ name, level: "pro"\|"mid" }] }` |
+| `education.json` | array de `{ name, meta, note, highlight, links[] }` |
+| `languages.json` | array de `{ name, level, cefr (1–6), native? }` |
+| `domains.json` | array de `{ icon, name, desc, code }` · `ticker.json` = array de strings |
+| `ui.json` | textos fijos de interfaz (claves bilingües) |
+
+- **Enlaces** (`links[]`): `{ "label": "GitHub", "url": "https://…", "icon": "github" }`
+- **Media** (`media[]`): `{ "type": "image"|"youtube"|"vimeo", "src": "ruta-o-URL", "caption": {"es":"…","en":"…"} }`
+- **Íconos** válidos: `gear, shield, music, chip, cpu, cube, chart, robot, spark, code, wrench, github, linkedin, mail, arrow` (definidos en `js/render.js`).
+
+## Probar en local
+
+Los JSON se cargan con `fetch`, así que **abrir el HTML con doble clic
+(`file://`) no funciona**. Usa un servidor estático:
+
+```
+python -m http.server
 ```
 
-## Agregar un proyecto nuevo → `projects.js`
-
-Copia un bloque existente. Campos clave:
-
-- `id`: único y sin espacios — define la URL (`project.html?id=mi-proyecto`)
-- `icon`: `"gear"`, `"shield"`, `"music"`, `"chip"`, `"cube"` o `"chart"`
-- `repo`: link de GitHub o `null`
-- `detail.gallery`: para fotos, sube imágenes a `assets/projects/` y lista las rutas:
-  `gallery: ["assets/projects/foto1.png", "assets/projects/foto2.png"]`
-
-## Agregar una habilidad → `skills.js`
-
-Añade `{ name: "Nombre", level: "pro" }` al grupo que corresponda.
-`level: "pro"` = dominio (borde sólido) · `level: "mid"` = familiaridad (borde punteado).
-
-## Agregar certificación o título → `education.js`
-
-Copia un bloque. `highlight: true` la marca como destacada; `note` es una línea extra opcional en color de acento (ej. un reconocimiento).
-
-## Cambiar datos personales / métricas del hero → `profile.js`
-
-Nombre, rol, métricas animadas (`stats`), redes sociales y texto de contacto.
-
-## Cambiar la paleta de colores → `../css/tokens.css`
-
-La paleta completa son ~10 variables al inicio del archivo. Hay 3 paletas
-alternativas listas para copiar/pegar en los comentarios del mismo archivo.
-
-## Pendientes conocidos
-
-- [ ] `experience.js`: reemplazar `"Empresa"` por el nombre real (primer registro).
-- [ ] Crear `assets/og-image.png` (1200×630) para el preview al compartir en LinkedIn/WhatsApp.
+y abre `http://localhost:8000`.
